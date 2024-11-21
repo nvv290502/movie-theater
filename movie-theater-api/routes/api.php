@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,14 +20,24 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('auth/register', [AuthController::class,'register']);
+Route::post('auth/register', [AuthController::class, 'register']);
 
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {
-    Route::post('/login', [AuthController::class,'login']);
+    Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh',[AuthController::class, 'refresh']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/profile', [AuthController::class, 'profile']);
+});
+
+Route::group(['middleware' => 'is.login'], function () {
+    Route::post('/user/{id}', [UserController::class, 'update']);
+});
+
+Route::group(['middleware' => ['is.login', 'is.admin']], function () {
+    Route::get('/user', [UserController::class, 'index']);
+    Route::get('/user/{id}', [UserController::class, 'get']);
+    Route::post('/user/is-enabled/{id}', [UserController::class, 'isEnabled']);
 });

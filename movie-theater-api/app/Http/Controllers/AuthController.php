@@ -22,7 +22,7 @@ class AuthController extends Controller
         $token = auth('api')->attempt($credentials);
 
         if (!$token) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['status' => 400, 'error' => 'Unauthorized', 'message' => 'Tai khoan mat khau khong chinh xac'], 400);
         }
 
         $refreshToken = $this->createRefreshToken();
@@ -45,7 +45,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => '201',
-            'message' => 'Create successfully!',
+            'message' => 'Dang ky thanh cong',
             'data' => $user,
         ]);
     }
@@ -74,7 +74,7 @@ class AuthController extends Controller
     {
         auth()->user();
         return response()->json(
-            ['message' => 'Successfully logout']
+            ['status' => 200, 'message' => 'Logout thanh cong']
         );
     }
 
@@ -85,7 +85,7 @@ class AuthController extends Controller
             $decode = JWTAuth::getJWTProvider()->decode($refreshToken);
             $user = User::find($decode['sub']);
             if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
+                return response()->json(['status' => 404, 'message' => 'Nguoi dung khong ton tai'], 404);
             }
 
             auth('api')->invalidate(); // vo hieu hoa token hien tai
@@ -95,7 +95,7 @@ class AuthController extends Controller
 
             return $this->respondWithToken($token, $refreshToken);
         } catch (Exception $ex) {
-            return response()->json(['error' => 'Refresh token invalid'], 500);
+            return response()->json(['status' => 500, 'message' => 'Refresh token khong hop le'], 500);
         }
     }
 

@@ -15,8 +15,8 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!auth('api')->check()){
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (!auth('api')->check()) {
+            return response()->json([['status' => 401, 'error' => 'Unauthorized', 'message' => 'Ban chua dang nhap hoac token khong chinh xac']], 401);
         }
         return $next($request);
     }
