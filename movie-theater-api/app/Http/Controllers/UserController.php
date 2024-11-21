@@ -52,9 +52,11 @@ class UserController extends Controller
 
         try {
             $user = User::find($id);
-            $imagePath = $this->imageService->imageUpload($request->file('avatar_url'));
-            $data = $request->all();
-            $data['avatar_url'] = $imagePath;
+            if ($request->hasFile('avatar_url')) {
+                $imagePath = $this->imageService->imageUpload($request->file('avatar_url'));
+                $data = $request->all();
+                $data['avatar_url'] = $imagePath;
+            }
             $user->update($data);
             return response()->json([
                 'status' => 202,
@@ -82,7 +84,7 @@ class UserController extends Controller
                 'message' => 'Nguoi dung khong ton tai'
             ], 404);
         }
-        
+
         $user->update(['is_enabled' => (bool) $request['isEnabled']]);
 
         return response()->json([

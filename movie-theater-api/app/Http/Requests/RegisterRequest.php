@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RegisterRequest extends FormRequest
 {
@@ -22,10 +24,10 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'=>'required|max:50|unique:users,username',
-            'password'=>'required|confirmed',
-            'password_confirmation'=>'required',
-            'email'=>'required|email|unique:users,email'
+            'username' => 'required|max:50|unique:users,username',
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
+            'email' => 'required|email|unique:users,email'
         ];
     }
 
@@ -40,7 +42,20 @@ class RegisterRequest extends FormRequest
             'password_confirmation.required' => 'Mat khau khong duoc de trong',
             'email.required' => 'Email khong duoc de trong',
             'email.email' => 'Email khong dung dinh dang',
-            'email.unique' => 'Email da ton tai', 
+            'email.unique' => 'Email da ton tai',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->toArray();
+
+        throw new HttpResponseException(
+            response()->json([
+                'status' => 422,
+                'message' => 'Loi du lieu input',
+                'errors' => $errors
+            ], 422)
+        );
     }
 }
