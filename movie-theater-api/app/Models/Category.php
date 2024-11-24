@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['category_name', 'description'];
     protected $primaryKey = 'category_id';
 
     public function movies()
