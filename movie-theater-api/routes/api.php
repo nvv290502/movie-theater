@@ -2,9 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MovieController;
 use App\Http\Controllers\UserController;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::resource("category", CategoryController::class);
+Route::resource("movie", MovieController::class);
+Route::get("movie-upcoming", [MovieController::class, 'getUpcomingMovie']);
 Route::post('auth/register', [AuthController::class, 'register']);
 
 Route::group([

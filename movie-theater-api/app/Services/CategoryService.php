@@ -7,6 +7,7 @@ use App\Exceptions\ObjectEmptyException;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Exceptions;
 use App\Http\Requests\CategoryRequest;
+use App\Models\Category;
 
 class CategoryService
 {
@@ -18,12 +19,16 @@ class CategoryService
         $this->categoryRepositoryInterface = $categoryRepositoryInterface;
     }
 
-    public function getAll($size)
+    public function getAll($size, $isEnabled)
     {
         if (!is_numeric($size) || $size < 0) {
             throw new InvalidNumbericException("size phải là một số nguyên lớn hơn 0");
         }
-        return $this->categoryRepositoryInterface->getAll($size);
+
+        if (empty($isEnabled)) {
+            return $this->categoryRepositoryInterface->getAll($size);
+        }
+        return $this->categoryRepositoryInterface->getAllIsEnabled($size, $isEnabled);
     }
 
     public function getById($id)
@@ -39,5 +44,30 @@ class CategoryService
     public function create(CategoryRequest $request)
     {
         return $this->categoryRepositoryInterface->create($request);
+    }
+
+    public function update(CategoryRequest $request, $id)
+    {
+        $category = Category::find($id);
+
+        if (empty($category)) {
+            throw new ObjectEmptyException('Không có thể loại nào có id là ' . $id);
+        }
+
+        return $this->categoryRepositoryInterface->update($request, $id);
+    }
+
+    public function isEnabled($id)
+    {
+
+        $category = Category::find($id);
+
+        if (empty($category)) {
+            throw new ObjectEmptyException('Không có thể loại nào có id là ' . $id);
+        }
+
+        $this->categoryRepositoryInterface->isEnabled($category);
+
+        return $category;
     }
 }

@@ -10,7 +10,12 @@ class CategoryRepository implements CategoryRepositoryInterface
 {
     public function getAll($size)
     {
-        return Category::where('is_enabled', 1)->paginate($size);
+        return Category::query()->paginate($size);
+    }
+
+    public function getAllIsEnabled($size, $isEnabled)
+    {
+        return Category::where('is_enabled', $isEnabled)->paginate($size);
     }
 
     public function getById($id)
@@ -23,6 +28,24 @@ class CategoryRepository implements CategoryRepositoryInterface
         return Category::create([
             'category_name' => $request->name,
             'description' => $request->description
+        ]);
+    }
+
+    public function update(CategoryRequest $request, $id)
+    {
+        return Category::updateOrCreate(
+            ['category_id' => $id],
+            [
+                'category_name' => $request->name,
+                'descripton' => $request->description
+            ]
+        );
+    }
+
+    public function isEnabled(Category $category)
+    {
+        return $category->update([
+            'is_enabled' => !$category->is_enabled,
         ]);
     }
 }

@@ -9,11 +9,11 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_name', 'description'];
+    protected $fillable = ['category_name', 'description', 'is_enabled'];
     protected $primaryKey = 'category_id';
 
     public function movies()
     {
-        return $this->belongsToMany(Movie::class, 'movie_category')->withTimestamps();
+        return $this->belongsToMany(Movie::class, 'movie_category', 'category_id', 'movie_id')->withTimestamps();
     }
 }

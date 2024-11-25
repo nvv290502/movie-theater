@@ -6,6 +6,8 @@ use App\Http\Requests\CategoryRequest;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
+use function PHPUnit\Framework\isEmpty;
+
 class CategoryController extends Controller
 {
     protected $categoryService;
@@ -19,10 +21,11 @@ class CategoryController extends Controller
     public function index()
     {
         $size = request()->input("size", 5);
+        $isEnabled = request()->get('isEnabled');
         return response()->json([
             'status' => 200,
             'message' => 'Danh sách thể loại',
-            'data' => $this->categoryService->getAll($size)
+            'data' => $this->categoryService->getAll($size, $isEnabled)
         ]);
     }
 
@@ -57,16 +60,28 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        $category = $this->categoryService->update($request, $id);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cap nhat the loai co id la ' . $id . ' thanh cong',
+            'data' => $category
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $category = $this->categoryService->isEnabled($id);
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cap nhat trang thai the loai co id la ' . $id . ' thanh cong',
+            'data' => $category
+        ]);
     }
 }

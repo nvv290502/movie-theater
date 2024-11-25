@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->bigIncrements('movie_id');
-            $table->string('movie_name')->nullable();
-            $table->text('summary');
-            $table->tinyInteger('duration')->nullable();
-            $table->date('release_date')->nullable();
+            $table->string('movie_name');
+            $table->text('summary')->nullable();
+            $table->tinyInteger('duration');
+            $table->date('release_date');
             $table->string('author')->nullable();
             $table->string('actor')->nullable();
-            $table->string('language', 100);
-            $table->string('trailer', 255);
+            $table->string('language', 100)->nullable();
+            $table->string('trailer', 255)->nullable();
             $table->boolean('is_enabled')->default(true);
-            $table->string('poster_url');
-            $table->string('banner_url');
+            $table->string('poster_url')->nullable();
+            $table->string('banner_url')->nullable();
 
             $table->timestamps();
         });
