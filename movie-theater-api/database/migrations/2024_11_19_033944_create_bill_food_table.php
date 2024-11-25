@@ -17,7 +17,8 @@ return new class extends Migration
             $table->primary(['bill_id', 'food_id']);
             $table->foreign('bill_id')->references('bill_id')->on('bills');
             $table->foreign('food_id')->references('food_id')->on('foods');
-            $table->float('price')->nullable();
+            $table->float('price');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }
