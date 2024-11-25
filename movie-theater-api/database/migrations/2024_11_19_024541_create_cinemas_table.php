@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('cinemas', function (Blueprint $table) {
             $table->bigIncrements('cinema_id');
-            $table->string('cinema_name', 255)->nullable();
-            $table->string('cinema_image_url');
-            $table->string('address');
-            $table->string('hotline', 20);
-            $table->text('description');
-            $table->tinyInteger('rating');
+            $table->string('cinema_name', 255);
+            $table->string('cinema_image_url')->nullable();
+            $table->string('address')->nullable();
+            $table->string('hotline', 20)->nullable();
+            $table->text('description')->nullable();
+            $table->tinyInteger('rating')->nullable();
             $table->boolean('is_enabled')->default(true);
             $table->timestamps();
         });

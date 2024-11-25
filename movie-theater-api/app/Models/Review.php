@@ -13,11 +13,11 @@ class Review extends Model
 
     public function movies()
     {
-        return $this->belongsToMany(Movie::class);
+        return $this->belongsTo(Movie::class);
     }
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class);
     }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('seats', function (Blueprint $table) {
             $table->bigIncrements('seat_id');
-            $table->string('row_name', 10)->nullable();
-            $table->string('column_name', 10)->nullable();
+            $table->string('row_name', 10);
+            $table->string('column_name', 10);
             $table->timestamps();
         });
     }

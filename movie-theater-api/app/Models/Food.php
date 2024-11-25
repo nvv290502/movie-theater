@@ -12,6 +12,6 @@ class Food extends Model
 
     public function billFood()
     {
-        return $this->belongsToMany(BillFood::class);
+        return $this->belongsTo(BillFood::class);
     }
 }

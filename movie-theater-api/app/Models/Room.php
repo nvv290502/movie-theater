@@ -12,7 +12,7 @@ class Room extends Model
 
     public function cinemas()
     {
-        return $this->belongsToMany(Cinema::class);
+        return $this->belongsTo(Cinema::class);
     }
     public function schedules()
     {

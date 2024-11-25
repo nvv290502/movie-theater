@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->bigIncrements('schedule_id');
-            $table->date('schedule_date')->nullable();
-            $table->time('schedule_time')->nullable();
+            $table->date('schedule_date');
+            $table->time('schedule_time');
             $table->unsignedBigInteger('movie_id');
             $table->foreign('movie_id')->references('movie_id')->on('movies');
             $table->timestamps();

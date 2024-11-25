@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('foods', function (Blueprint $table) {
             $table->bigIncrements('food_id');
-            $table->string('food_name', 255)->nullable();
-            $table->float('price')->nullable();
-            $table->tinyInteger('stock_quantity')->nullable();
-            $table->string('image_food');
-            $table->text('description');
+            $table->string('food_name', 255);
+            $table->float('price');
+            $table->tinyInteger('stock_quantity');
+            $table->string('image_food')->nullable();
+            $table->text('description')->nullable();
             $table->boolean('is_enabled')->default(true);
             $table->timestamps();
         });
