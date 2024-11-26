@@ -15,4 +15,5 @@ interface MovieRepositoryInterface
     public function isEnabled(Movie $movie);
     public function existsMovie($movieName);
     public function getUpcomingMovie();
+    public function movieShowByDate($date);
 }

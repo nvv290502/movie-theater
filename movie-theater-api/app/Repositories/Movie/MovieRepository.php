@@ -2,8 +2,9 @@
 
 namespace App\Repositories\Movie;
 
-use App\Http\Requests\MovieRequest;
 use App\Models\Movie;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class MovieRepository implements MovieRepositoryInterface
 {
@@ -74,5 +75,17 @@ class MovieRepository implements MovieRepositoryInterface
         return Movie::where('release_date', '>', now())
             ->where('release_date', '<', now()->addDays(7))
             ->get();
+    }
+
+    public function movieShowByDate($date)
+    {
+        return DB::table('schedules as sch')
+        ->join('movies as m', 'sch.movie_id', '=', 'm.movie_id')
+        ->join('schedule_room as s', 'sch.schedule_id', '=', 's.schedule_id')
+        ->where('sch.schedule_date', $date)
+        ->where('m.is_enabled', true)
+        ->select('m.*', )
+        ->distinct()
+        ->get();
     }
 }

@@ -9,14 +9,15 @@ class Room extends Model
 {
     use HasFactory;
     protected $primaryKey = 'room_id';
+    protected $fillable = ['room_name','location','room_type','number_seat_column','number_seat_row','is_enabled','cinema_id','room_id'];
 
     public function cinemas()
     {
-        return $this->belongsTo(Cinema::class);
+        return $this->belongsTo(Cinema::class, 'cinema_id');
     }
     public function schedules()
     {
-        return $this->belongsToMany(Schedule::class)->using(ScheduleRoom::class);
+        return $this->belongsToMany(Schedule::class, 'schedule_room', 'room_id', 'schedule_id')->using(ScheduleRoom::class);
     }
 
     public function seats()

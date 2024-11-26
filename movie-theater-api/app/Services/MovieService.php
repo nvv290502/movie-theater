@@ -2,14 +2,15 @@
 
 namespace App\Services;
 
+use App\Exceptions\DateTimeFormatException;
 use App\Exceptions\InvalidNumbericException;
 use App\Exceptions\ObjectEmptyException;
 use App\Exceptions\ObjectExistsException;
 use App\Http\Requests\MovieRequest;
 use App\Models\Movie;
 use App\Repositories\Movie\MovieRepositoryInterface;
+use DateTime;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class MovieService
 {
@@ -49,7 +50,7 @@ class MovieService
         $movie = null;
         DB::transaction(function () use ($movieRequest, &$movie) {
 
-            if($this->movieRepositoryInterface->existsMovie($movieRequest->name)){
+            if ($this->movieRepositoryInterface->existsMovie($movieRequest->name)) {
                 throw new ObjectExistsException('Phim da ton tai');
             }
 
@@ -58,7 +59,7 @@ class MovieService
 
             $request = $movieRequest->all();
             $request['poster'] = $imagePathPoster;
-            $request['banner'] = $imagePathBanner; 
+            $request['banner'] = $imagePathBanner;
 
             $movie = $this->movieRepositoryInterface->create($request);
 
@@ -69,17 +70,16 @@ class MovieService
     }
 
     public function update(MovieRequest $movieRequest, $id)
-    { 
+    {
         $movie = Movie::find($id);
 
         if (empty($movie)) {
             throw new ObjectEmptyException('Không có phim nào có id là ' . $id);
         }
 
-        $movie = null;
         DB::transaction(function () use ($movieRequest, &$movie, &$id) {
 
-            if($this->movieRepositoryInterface->existsMovie($movieRequest->name)){
+            if ($this->movieRepositoryInterface->existsMovie($movieRequest->name)) {
                 throw new ObjectExistsException('Phim da ton tai');
             }
 
@@ -88,20 +88,18 @@ class MovieService
 
             $request = $movieRequest->validated();
             $request['poster'] = $imagePathPoster;
-            $request['banner'] = $imagePathBanner; 
+            $request['banner'] = $imagePathBanner;
 
             $movie = $this->movieRepositoryInterface->update($request, $id);
 
             $movie->categories()->sync($movieRequest->categoryIds);
         });
 
-        return $movie; 
-
+        return $movie;
     }
 
     public function isEnabled($id)
     {
-
         $movie = Movie::find($id);
 
         if (empty($movie)) {
@@ -113,13 +111,27 @@ class MovieService
         return $movie;
     }
 
-    public function getUpcomingMovie(){
+    public function getUpcomingMovie()
+    {
         $movies = $this->movieRepositoryInterface->getUpcomingMovie();
 
-        if(count($movies) <= 0){
+        if (count($movies) <= 0) {
             throw new ObjectEmptyException('Khong co phim nao sap chieu');
         }
 
         return $movies;
+    }
+
+    public function movieShowByDate($date) {
+        if(!$this->isValidDate($date, 'Y-m-d')){
+            throw new DateTimeFormatException('Ngay nhap vao khong hop le');
+        }
+        return $this->movieRepositoryInterface->movieShowByDate($date);
+    }
+
+    function isValidDate($date, $format)
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) === $date;
     }
 }

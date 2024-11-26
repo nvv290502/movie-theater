@@ -19,7 +19,7 @@ class Movie extends Model
 
     public function schedules()
     {
-        return $this->hasMany(Schedule::class);
+        return $this->hasMany(Schedule::class, 'schedule_id');
     }
 
     public function reviews()

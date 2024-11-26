@@ -9,6 +9,7 @@ class ScheduleRoom extends Model
 {
     use HasFactory;
     protected $primaryKey = ['schedule_id', 'room_id'];
+    protected $tabel = 'schedule_room';
 
     public function billDetail()
     {

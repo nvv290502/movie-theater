@@ -12,11 +12,11 @@ class Schedule extends Model
 
     public function movies()
     {
-        return $this->belongsTo(Movie::class);
+        return $this->belongsTo(Movie::class, 'schedule_id');
     }
 
     public function rooms()
     {
-        return $this->belongsToMany(Room::class)->using(ScheduleRoom::class);
+        return $this->belongsToMany(Room::class, 'schedule_room','schedule_id','schedule_room')->using(ScheduleRoom::class);
     }
 }

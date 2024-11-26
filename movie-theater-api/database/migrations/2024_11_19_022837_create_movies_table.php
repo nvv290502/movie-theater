@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('movie_id');
             $table->string('movie_name');
             $table->text('summary')->nullable();
-            $table->tinyInteger('duration');
+            $table->integer('duration');
             $table->date('release_date');
             $table->string('author')->nullable();
             $table->string('actor')->nullable();

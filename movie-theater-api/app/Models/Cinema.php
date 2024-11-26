@@ -9,9 +9,10 @@ class Cinema extends Model
 {
     use HasFactory;
     protected $primaryKey = 'cinema_id';
+    protected $fillable = ['cinema_name', 'cinema_image_url', 'address', 'hotline', 'description', 'is_enabled'];
 
     public function rooms()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Room::class, 'room_id');
     }
 }

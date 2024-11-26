@@ -48,7 +48,7 @@ class MovieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         $movie = $this->movieService->getById($id);
 
@@ -97,5 +97,15 @@ class MovieController extends Controller
             'message' => 'Danh sach phim sap chieu',
             'data' => $movie
         ]);
+    }
+
+    public function movieShowToday(){
+        $movie = $this->movieService->movieShowByDate(date('Y-m-d'));
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach phim chieu hom nay',
+            'data' => $movie
+        ]); 
     }
 }
