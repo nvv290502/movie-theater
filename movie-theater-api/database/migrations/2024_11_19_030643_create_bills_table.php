@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('is_ticket_issued')->default(true);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('user_id')->on('users');
+            $table->string('bill_code',100);
             $table->timestamps();
         });
     }

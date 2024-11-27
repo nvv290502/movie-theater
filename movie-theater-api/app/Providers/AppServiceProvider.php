@@ -11,6 +11,14 @@ use App\Repositories\Cinema\CinemaRepositoryInterface;
 use App\Repositories\Cinema\CinemaRepository;
 use App\Repositories\Room\RoomRepositoryInterface;
 use App\Repositories\Room\RoomRepository;
+use App\Repositories\Schedule\ScheduleRepositoryInterface;
+use App\Repositories\Schedule\ScheduleRepository;
+use App\Repositories\Showtime\ShowtimeRepositoryInterface;
+use App\Repositories\Showtime\ShowtimeRepository;
+use App\Repositories\Seat\SeatRepositoryInterface;
+use App\Repositories\Seat\SeatRepository;
+use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\User\UserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +45,26 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(
             RoomRepositoryInterface::class,
             RoomRepository::class
+        );
+
+        $this->app->singleton(
+            ScheduleRepositoryInterface::class,
+            ScheduleRepository::class
+        );
+
+        $this->app->singleton(
+            ShowtimeRepositoryInterface::class,
+            ShowtimeRepository::class
+        );
+
+        $this->app->singleton(
+            SeatRepositoryInterface::class,
+            SeatRepository::class
+        );
+
+        $this->app->singleton(
+            UserRepositoryInterface::class,
+            UserRepository::class
         );
     }
 

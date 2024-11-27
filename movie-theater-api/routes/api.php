@@ -5,6 +5,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ShowTimeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,14 +24,24 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::resource("category", CategoryController::class);
-Route::resource("movie", MovieController::class);
-Route::resource("cinema", CinemaController::class);
-Route::resource("room", RoomController::class);
-Route::get("cinema-showtime", [CinemaController::class, 'getCinemaByMovieShowtime']);
-Route::get("movie-upcoming", [MovieController::class, 'getUpcomingMovie']);
 Route::post('auth/register', [AuthController::class, 'register']);
+
+Route::resource("category", CategoryController::class);
+Route::resource("cinema", CinemaController::class);
+Route::get("cinema-showtime", [CinemaController::class, 'getCinemaByMovieShowtime']);
+
+Route::resource("room", RoomController::class);
+
+Route::resource("movie", MovieController::class);
+Route::get("movie-upcoming", [MovieController::class, 'getUpcomingMovie']);
 Route::get("/movie-show-today", [MovieController::class, 'movieShowToday']);
+Route::get("/movie-related", [MovieController::class, 'getMovieRelated']);
+Route::get("/movie-showtime", [MovieController::class, 'getMovieByShowTime']);
+
+Route::resource("schedule", ScheduleController::class);
+Route::get("schedule-byCinema", [ScheduleController::class, 'getScheduleByCinema']);
+
+Route::get("showtime", [ShowTimeController::class, 'getShowtimeByMovie']);
 
 Route::group([
     'middleware' => 'api',

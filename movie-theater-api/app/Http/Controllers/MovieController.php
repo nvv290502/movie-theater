@@ -108,4 +108,32 @@ class MovieController extends Controller
             'data' => $movie
         ]); 
     }
+
+    public function getMovieRelated(Request $request)
+    {
+        $categoryIds = $request->get('categoryIds');
+
+        $movie = $this->movieService->getMovieListCategoryIds($categoryIds);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach phim lien quan',
+            'data' => $movie->load('categories')
+        ]); 
+    }
+
+    public function getMovieByShowTime(Request $request)
+    {
+        $showTime = $request->get('time');
+        $showDate = $request->get('date');
+        $cinemaId = $request->get('cinema_id');
+
+        $movie = $this->movieService->getMovieByShowTime($showTime, $showDate, $cinemaId);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach phim theo suat chieu',
+            'data' => $movie
+        ]); 
+    }
 }

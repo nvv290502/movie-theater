@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign('room_id')->references('room_id')->on('schedule_room');
             $table->foreign('bill_id')->references('bill_id')->on('bills');
             $table->foreign('seat_id')->references('seat_id')->on('seats');
+            $table->float('price');
             $table->timestamps();
         });
     }

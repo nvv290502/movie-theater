@@ -55,7 +55,8 @@ class CinemaRepository implements CinemaRepositoryInterface
         ->join('schedule_room as sr', 'r.room_id','sr.room_id')
         ->join('schedules as sch', 'sch.schedule_id','sr.schedule_id')
         ->where('sch.movie_id',$movieId)
-        ->where('sch.schedule_date', '>=', now())
+        ->where('sch.schedule_date','>=', DB::raw('DATE(NOW())'))
+        ->where('sch.schedule_time','>=', DB::raw('TIME(NOW())'))
         ->when($city, function ($query, $city) {
             $query->where('c.address', 'like', '%' . $city . '%');
         })

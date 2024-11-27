@@ -11,6 +11,7 @@ class Category extends Model
 
     protected $fillable = ['category_name', 'description', 'is_enabled'];
     protected $primaryKey = 'category_id';
+    protected $hidden = ['pivot'];
 
     public function movies()
     {

@@ -16,4 +16,6 @@ interface MovieRepositoryInterface
     public function existsMovie($movieName);
     public function getUpcomingMovie();
     public function movieShowByDate($date);
+    public function getMovieListCategoryIds(array $categoryId);
+    public function getMovieByShowTime($showTime, $showDate, $cinemaId) ;
 }

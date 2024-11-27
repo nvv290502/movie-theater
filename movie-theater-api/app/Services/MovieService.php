@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\DateTimeFormatException;
+use App\Exceptions\InvalidInputException;
 use App\Exceptions\InvalidNumbericException;
 use App\Exceptions\ObjectEmptyException;
 use App\Exceptions\ObjectExistsException;
@@ -122,8 +123,9 @@ class MovieService
         return $movies;
     }
 
-    public function movieShowByDate($date) {
-        if(!$this->isValidDate($date, 'Y-m-d')){
+    public function movieShowByDate($date)
+    {
+        if (!$this->isValidDate($date, 'Y-m-d')) {
             throw new DateTimeFormatException('Ngay nhap vao khong hop le');
         }
         return $this->movieRepositoryInterface->movieShowByDate($date);
@@ -133,5 +135,17 @@ class MovieService
     {
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) === $date;
+    }
+
+    public function getMovieListCategoryIds(array $categoryIds) {
+        if(count($categoryIds) <= 0){
+            throw new InvalidInputException('Danh sach the loai khong duoc null');
+        }
+        return $this->movieRepositoryInterface->getMovieListCategoryIds($categoryIds);
+    }
+
+    public function getMovieByShowTime($showTime, $showDate, $cinemaId) 
+    {
+        return $this->movieRepositoryInterface->getMovieByShowTime($showTime, $showDate, $cinemaId);
     }
 }
