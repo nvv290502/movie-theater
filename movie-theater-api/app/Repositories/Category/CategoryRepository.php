@@ -5,6 +5,7 @@ namespace App\Repositories\Category;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
@@ -47,5 +48,17 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $category->update([
             'is_enabled' => !$category->is_enabled,
         ]);
+    }
+
+    public function getListName()
+    {
+        return DB::table('categories as c')
+            ->pluck('category_name');
+    }
+
+    public function getByName($categoryName)
+    {
+        return Category::where('category_name', $categoryName)
+            ->first();
     }
 }

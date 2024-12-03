@@ -9,12 +9,12 @@ class MovieRepository implements MovieRepositoryInterface
 {
     public function getAll($size)
     {
-        return Movie::query()->paginate($size);
+        return Movie::with('categories:category_id')->paginate($size);
     }
 
     public function getAllIsEnabled($size, $isEnabled)
     {
-        return Movie::where('is_enabled', $isEnabled)->paginate($size);
+        return Movie::with('categories:category_id')->where('is_enabled', $isEnabled)->paginate($size);
     }
 
     public function getById($id)
@@ -27,7 +27,7 @@ class MovieRepository implements MovieRepositoryInterface
         return Movie::create([
             'movie_name' => $request['name'],
             'duration' => $request['duration'],
-            'releaseDate' => $request['releaseDate'],
+            'release_date' => $request['releaseDate'],
             'author' => $request['author'],
             'actor' => $request['actor'],
             'trailer' => $request['trailer'],
@@ -38,27 +38,39 @@ class MovieRepository implements MovieRepositoryInterface
         ]);
     }
 
-    public function existsMovie($movieName)
+    public function existsMovie($movieName, $id)
     {
-        return Movie::where('movie_name', $movieName)->exists();
+        return Movie::where('movie_name', $movieName)
+        ->when($id, function($query, $id){
+            $query->where('movie_id','!=', $id);
+        })
+        ->exists();
     }
 
     public function update(array $request, $id)
     {
+        $data = [
+            'movie_name' => $request['name'],
+            'duration' => $request['duration'],
+            'releaseDate' => $request['releaseDate'],
+            'author' => $request['author'],
+            'actor' => $request['actor'],
+            'trailer' => $request['trailer'],
+            'summary' => $request['summary'],
+            'language' => $request['language']
+        ];
+
+        if(!empty($request['poster'])){
+            $data['poster_url'] = $request['poster'];
+        }
+
+        if(!empty($request['banner'])){
+            $data['banner_url'] = $request['banner'];
+        }
+
         return Movie::updateOrCreate(
             ['movie_id' => $id],
-            [
-                'movie_name' => $request['name'],
-                'duration' => $request['duration'],
-                'releaseDate' => $request['releaseDate'],
-                'author' => $request['author'],
-                'actor' => $request['actor'],
-                'trailer' => $request['trailer'],
-                'summary' => $request['summary'],
-                'language' => $request['language'],
-                'poster_url' => $request['poster'],
-                'banner_url' => $request['banner'],
-            ]
+            $data
         );
     }
 
@@ -103,5 +115,17 @@ class MovieRepository implements MovieRepositoryInterface
                       $query_r->where('rooms.cinema_id', $cinemaId);
                   });
         })->get();
-    }       
+    } 
+    
+    public function getListName()
+    {
+        return DB::table('movies as m')
+            ->pluck('m.movie_name');
+    }
+
+    public function getByName($movieName)
+    {
+        return Movie::where('movie_name', $movieName)
+            ->first();
+    }
 }

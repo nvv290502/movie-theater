@@ -49,7 +49,7 @@ class CinemaService
         $cinema = null;
         DB::transaction(function () use ($cinemaRequest, &$cinema) {
 
-            if ($this->cinemaRepositoryInterface->existsCinema($cinemaRequest->name)) {
+            if ($this->cinemaRepositoryInterface->existsCinema($cinemaRequest->name, null)) {
                 throw new ObjectExistsException('Rap da ton tai');
             }
 
@@ -73,7 +73,7 @@ class CinemaService
         }
         DB::transaction(function () use ($cinemaRequest, &$cinema, &$id) {
 
-            if ($this->cinemaRepositoryInterface->existsCinema($cinemaRequest->name)) {
+            if ($this->cinemaRepositoryInterface->existsCinema($cinemaRequest->name, $id)) {
                 throw new ObjectExistsException('Rap da ton tai');
             }
 
@@ -92,7 +92,7 @@ class CinemaService
     {
         $cinema = Cinema::find($id);
 
-        if (empty($movie)) {
+        if (empty($cinema)) {
             throw new ObjectEmptyException('Không có rap nào có id là ' . $id);
         }
 

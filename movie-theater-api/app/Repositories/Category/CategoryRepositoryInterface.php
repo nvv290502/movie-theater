@@ -14,4 +14,6 @@ interface CategoryRepositoryInterface
     public function create(CategoryRequest $request);
     public function update(CategoryRequest $request, $id);
     public function isEnabled(Category $category);
+    public function getListName();
+    public function getByName($categoryName);
 }

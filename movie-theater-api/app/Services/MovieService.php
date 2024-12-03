@@ -51,7 +51,7 @@ class MovieService
         $movie = null;
         DB::transaction(function () use ($movieRequest, &$movie) {
 
-            if ($this->movieRepositoryInterface->existsMovie($movieRequest->name)) {
+            if ($this->movieRepositoryInterface->existsMovie($movieRequest->name, null)) {
                 throw new ObjectExistsException('Phim da ton tai');
             }
 
@@ -80,7 +80,7 @@ class MovieService
 
         DB::transaction(function () use ($movieRequest, &$movie, &$id) {
 
-            if ($this->movieRepositoryInterface->existsMovie($movieRequest->name)) {
+            if ($this->movieRepositoryInterface->existsMovie($movieRequest->name, $id)) {
                 throw new ObjectExistsException('Phim da ton tai');
             }
 
@@ -147,5 +147,25 @@ class MovieService
     public function getMovieByShowTime($showTime, $showDate, $cinemaId) 
     {
         return $this->movieRepositoryInterface->getMovieByShowTime($showTime, $showDate, $cinemaId);
+    }
+
+    public function getListName()
+    {
+        $movieNames = $this->movieRepositoryInterface->getListName();
+
+        if(count($movieNames) <= 0){
+            throw new ObjectEmptyException('Danh sach ten phim trong');
+        }
+        return $movieNames;
+    }
+
+    public function getByName($movieName)
+    {
+        $movie = $this->movieRepositoryInterface->getByName($movieName);
+
+        if(empty($movie)){
+            throw new ObjectEmptyException('Khong co phim nao thoa man');
+        }
+        return $movie;
     }
 }

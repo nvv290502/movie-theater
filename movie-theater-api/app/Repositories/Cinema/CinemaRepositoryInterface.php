@@ -10,6 +10,6 @@ interface CinemaRepositoryInterface{
     public function getById($id);
     public function createOrUpdate(array $request, $id);
     public function isEnabled(Cinema $cinema);
-    public function existsCinema($cinemaName);
+    public function existsCinema($cinemaName, $id);
     public function getCinemaByMovieShowTime($movieId, $city, $showDate);
 }

@@ -23,7 +23,8 @@ class CinemaRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'hotline' => 'regex:/^0\d{9}$/'
+            'hotline' => 'regex:/^0\d{9}$/',
+            'address' => 'required'
         ];
     }
 
@@ -32,7 +33,8 @@ class CinemaRequest extends FormRequest
         return [
             'name.required' => 'Ten khong duoc de trong',
             'name.max' => 'Ten khong duoc vuot qua 255 ky tu',
-            'hotline' => 'So dien thoai khong dung dinh dang'
+            'hotline' => 'So dien thoai khong dung dinh dang',
+            'address.required' => 'Dia chi khong duoc de trong'
         ];
     }
 }

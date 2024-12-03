@@ -22,10 +22,12 @@ class MovieController extends Controller
     {
         $size = request()->input("size", 5);
         $isEnabled = request()->get('isEnabled');
+
+        $movie = $this->movieService->getAll($size, $isEnabled);
         return response()->json([
             'status' => 200,
             'message' => 'Danh sách phim',
-            'data' => $this->movieService->getAll($size, $isEnabled)
+            'data' => $movie
         ]);
     }
 
@@ -34,6 +36,7 @@ class MovieController extends Controller
      */
     public function store(MovieRequest $request)
     {
+
         $movie = $this->movieService->create($request);
 
         if (!empty($movie)) {
@@ -55,7 +58,7 @@ class MovieController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Phim có id là ' . $id,
-            'data' => $movie
+            'data' => $movie->load('categories')
         ]);
     }
 
@@ -135,5 +138,27 @@ class MovieController extends Controller
             'message' => 'Danh sach phim theo suat chieu',
             'data' => $movie
         ]); 
+    }
+
+    public function getListName()
+    {
+        $movieNames = $this->movieService->getListName();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach ten the loai',
+            'data' => $movieNames
+        ]);
+    }
+
+    public function getByName($name)
+    {
+        $movie = $this->movieService->getByName($name);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Tim kiem phim thanh cong',
+            'data' => $movie
+        ]);
     }
 }

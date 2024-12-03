@@ -70,4 +70,24 @@ class CategoryService
 
         return $category;
     }
+
+    public function getListName()
+    {
+        $categoryNames = $this->categoryRepositoryInterface->getListName();
+
+        if(count($categoryNames) <= 0){
+            throw new ObjectEmptyException('Danh sach ten the loai trong');
+        }
+        return $categoryNames;
+    }
+
+    public function getByName($categoryName)
+    {
+        $category = $this->categoryRepositoryInterface->getByName($categoryName);
+
+        if(empty($category)){
+            throw new ObjectEmptyException('Khong co phim nao thoa man');
+        }
+        return $category;
+    }
 }

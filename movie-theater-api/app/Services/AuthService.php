@@ -18,9 +18,12 @@ class AuthService
             return response()->json(['status' => 400, 'error' => 'Unauthorized', 'message' => 'Tai khoan mat khau khong chinh xac'], 400);
         }
 
+        $user = User::where('username', $credentials['username'])->first();
+        $role = $user->roles->role_name;
+
         $refreshToken = $this->createRefreshToken();
 
-        return $this->respondWithToken($token, $refreshToken);
+        return $this->respondWithToken($token, $refreshToken, $role);
     }
 
     public function register(RegisterRequest $request)
@@ -48,11 +51,12 @@ class AuthService
         return $refreshToken;
     }
 
-    protected function respondWithToken($token, $refreshToken)
+    protected function respondWithToken($token, $refreshToken, $role)
     {
         return response()->json([
             'access_token' => $token,
             'refresh_token' => $refreshToken,
+            'role' => $role,
             'token_type' => 'bearer',
             'expires_in' => config('jwt.ttl') * 60,
         ]);
@@ -71,8 +75,9 @@ class AuthService
 
             $token = auth()->login($user); // tao token moi
             $refreshToken = $this->createRefreshToken();
+            $role = $user->roles->role_name;
 
-            return $this->respondWithToken($token, $refreshToken);
+            return $this->respondWithToken($token, $refreshToken, $role);
         } catch (Exception $ex) {
             return response()->json(['status' => 500, 'message' => 'Refresh token khong hop le'], 500);
         }

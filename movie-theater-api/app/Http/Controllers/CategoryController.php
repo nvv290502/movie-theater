@@ -84,4 +84,26 @@ class CategoryController extends Controller
             'data' => $category
         ]);
     }
+
+    public function getListName()
+    {
+        $categoryNames = $this->categoryService->getListName();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach ten the loai',
+            'data' => $categoryNames
+        ]);
+    }
+
+    public function getByName($name)
+    {
+        $category = $this->categoryService->getByName($name);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Tim kiem the loai thanh cong',
+            'data' => $category
+        ]);
+    }
 }

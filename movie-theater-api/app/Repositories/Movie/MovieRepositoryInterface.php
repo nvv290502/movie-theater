@@ -13,9 +13,11 @@ interface MovieRepositoryInterface
     public function create(array $request);
     public function update(array $request, $id);
     public function isEnabled(Movie $movie);
-    public function existsMovie($movieName);
+    public function existsMovie($movieName, $id);
     public function getUpcomingMovie();
     public function movieShowByDate($date);
     public function getMovieListCategoryIds(array $categoryId);
-    public function getMovieByShowTime($showTime, $showDate, $cinemaId) ;
+    public function getMovieByShowTime($showTime, $showDate, $cinemaId);
+    public function getListName();
+    public function getByName($categoryName);
 }

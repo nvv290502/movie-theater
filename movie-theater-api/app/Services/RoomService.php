@@ -7,15 +7,18 @@ use App\Exceptions\ObjectEmptyException;
 use App\Http\Requests\RoomRequest;
 use App\Models\Cinema;
 use App\Models\Room;
+use App\Repositories\Cinema\CinemaRepositoryInterface;
 use App\Repositories\Room\RoomRepositoryInterface;
 
 class RoomService
 {
     protected $roomRepositoryInterface;
+    protected $cinemaRepositoryInterface;
 
-    public function __construct(RoomRepositoryInterface $roomRepositoryInterface)
+    public function __construct(RoomRepositoryInterface $roomRepositoryInterface, CinemaRepositoryInterface $cinemaRepositoryInterface)
     {
         $this->roomRepositoryInterface = $roomRepositoryInterface;
+        $this->cinemaRepositoryInterface = $cinemaRepositoryInterface;
     }
     
     public function getAll($size, $isEnabled)
@@ -81,5 +84,15 @@ class RoomService
         $this->roomRepositoryInterface->isEnabled($room);
 
         return $room;
+    }
+
+    public function getRoomByCinema($cinemaId, $size)
+    {
+        $cinema = Cinema::find($cinemaId);
+        if(empty($cinema)){
+            throw new ObjectEmptyException('Rap khong ton tai');
+        }
+
+        return $this->roomRepositoryInterface->getRoomByCinema($cinemaId, $size);
     }
 }

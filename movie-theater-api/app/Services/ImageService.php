@@ -8,7 +8,9 @@ class ImageService
 {
     public function imageUpload($image){
         try{
-            return $image->store('images', 'public');
+            if($image != null){
+                return $image->store('images', 'public');
+            }
         }catch(Exception $ex){
             return response()->json([
                 'status' => 500,

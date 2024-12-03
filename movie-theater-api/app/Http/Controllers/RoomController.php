@@ -87,4 +87,16 @@ class RoomController extends Controller
             'data' => $room
         ]);
     }
+
+    public function getRoomByCinema($cinemaId)
+    {
+        $size = request()->get('size');
+        $room = $this->roomService->getRoomByCinema($cinemaId, $size);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach phong cua rap ' .$cinemaId,
+            'data' => $room
+        ]);
+    }
 }

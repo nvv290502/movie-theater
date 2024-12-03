@@ -44,4 +44,9 @@ class RoomRepository implements RoomRepositoryInterface
     {
         return Room::where('room_name', $roomName)->exists();
     }
+
+    public function getRoomByCinema($cinemaId, $size)
+    {
+        return Room::where('cinema_id', $cinemaId)->paginate($size);
+    }
 }
