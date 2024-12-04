@@ -20,4 +20,5 @@ interface MovieRepositoryInterface
     public function getMovieByShowTime($showTime, $showDate, $cinemaId);
     public function getListName();
     public function getByName($categoryName);
+    public function getMovieIsShowing();
 }

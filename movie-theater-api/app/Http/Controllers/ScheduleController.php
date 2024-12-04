@@ -68,4 +68,15 @@ class ScheduleController extends Controller
             'data' => $schedule
         ]);
     }
+
+    public function getScheduleByRoom($roomId)
+    {
+        $result = $this->scheduleSerive->getScheduleByRoom($roomId);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Thong tin suat chieu theo phong',
+            'data' => $result
+        ]);
+    }
 }

@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Exceptions\DateTimeFormatException;
 use App\Exceptions\InvalidInputException;
 use App\Exceptions\InvalidNumbericException;
+use App\Exceptions\ObjectEmptyException;
+use App\Models\Room;
 use App\Repositories\Schedule\ScheduleRepositoryInterface;
 use DateTime;
 
@@ -38,5 +40,16 @@ class ScheduleService
     {
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) === $date;
+    }
+
+    function getScheduleByRoom($roomId)
+    {
+        $room = Room::find($roomId);
+
+        if(empty($room)){
+            throw new ObjectEmptyException('Phong khong ton tai');
+        }
+
+        return $this->scheduleRepositoryInterface->getScheduleByRoom($roomId);
     }
 }

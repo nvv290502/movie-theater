@@ -168,4 +168,9 @@ class MovieService
         }
         return $movie;
     }
+
+    public function getMovieIsShowing()
+    {
+        return $this->movieRepositoryInterface->getMovieIsShowing();
+    }
 }

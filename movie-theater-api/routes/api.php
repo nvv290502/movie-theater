@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CinemaController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ScheduleController;
@@ -39,6 +40,9 @@ Route::get("cinema-showtime", [CinemaController::class, 'getCinemaByMovieShowtim
 
 Route::resource("room", RoomController::class);
 Route::get("room-byCinema/{cinemaId}", [RoomController::class, 'getRoomByCinema']);
+Route::get("isEnabled/cinema/room/{cinemaId}", [RoomController::class, 'getRoomIsEnabledByCinema']);
+Route::post("room/save-layout/{roomId}", [RoomController::class, 'saveLayout']);
+Route::post("room/update-initialization/{roomId}", [RoomController::class, 'updateInitialization']);
 
 Route::resource("movie", MovieController::class);
 Route::get("movie-upcoming", [MovieController::class, 'getUpcomingMovie']);
@@ -47,14 +51,17 @@ Route::get("/movie-related", [MovieController::class, 'getMovieRelated']);
 Route::get("/movie-showtime", [MovieController::class, 'getMovieByShowTime']);
 Route::get("list-movie-name", [MovieController::class, 'getListName']);
 Route::get("movie-search/{name}",[MovieController::class, 'getByName']);
+Route::get("showing/movie", [MovieController::class, 'getMovieIsShowing']);
 
 Route::resource("schedule", ScheduleController::class);
 Route::get("schedule-byCinema", [ScheduleController::class, 'getScheduleByCinema']);
+Route::get("room/schedule/{roomId}", [ScheduleController::class, 'getScheduleByRoom']);
 
 Route::get("showtime", [ShowTimeController::class, 'getShowtimeByMovie']);
 
 Route::resource('seat', SeatController::class);
 Route::get("seat-byRoom/{roomId}", [SeatController::class, 'getSeatByRoom']);
+Route::post("seat/update-status/{roomId}", [SeatController::class, 'updateStatusSeat']);
 
 Route::group([
     'middleware' => 'api',

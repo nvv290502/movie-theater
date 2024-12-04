@@ -128,4 +128,9 @@ class MovieRepository implements MovieRepositoryInterface
         return Movie::where('movie_name', $movieName)
             ->first();
     }
+
+    public function getMovieIsShowing()
+    {
+        return Movie::where('is_enabled', 1)->where('release_date','<=', now())->orderBy('release_date','desc')->get();
+    }
 }

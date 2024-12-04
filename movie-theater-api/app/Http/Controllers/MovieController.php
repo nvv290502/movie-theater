@@ -161,4 +161,15 @@ class MovieController extends Controller
             'data' => $movie
         ]);
     }
+
+    public function getMovieIsShowing()
+    {
+        $movie = $this->movieService->getMovieIsShowing();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach phim dang phat hanh',
+            'data' => $movie
+        ]);
+    }
 }

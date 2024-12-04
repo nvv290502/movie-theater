@@ -49,4 +49,9 @@ class RoomRepository implements RoomRepositoryInterface
     {
         return Room::where('cinema_id', $cinemaId)->paginate($size);
     }
+
+    public function getRoomIsEnabledByCinema($cinemaId, $size)
+    {
+        return Room::where('cinema_id', $cinemaId)->where('is_enabled',1)->paginate($size);
+    }
 }

@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\RoomSeatService;
 use App\Services\SeatService;
 use Illuminate\Http\Request;
 
 class SeatController extends Controller
 {
     protected $seatService;
+    protected $roomSeatService;
 
-    public function __construct(SeatService $seatService)
+    public function __construct(SeatService $seatService, RoomSeatService $roomSeatService)
     {
         $this->seatService = $seatService;
+        $this->roomSeatService = $roomSeatService;
     }
     /**
      * Display a listing of the resource.
@@ -61,6 +64,16 @@ class SeatController extends Controller
             'status' => 200,
             'message' => 'Danh sach ghe phong có id là ' . $roomId,
             'data' => $seats
+        ]);
+    }
+
+    public function updateStatusSeat($roomId, Request $request)
+    {
+        $this->roomSeatService->updateStatusSeat($roomId, $request);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cap nhat trang thai ghe thanh cong',
         ]);
     }
 }

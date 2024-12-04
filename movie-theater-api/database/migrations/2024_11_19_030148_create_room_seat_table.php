@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('room_seat', function (Blueprint $table) {
 
             $table->enum('type_seat', ['NORMAL', 'VIP', "HIDDEN"]);
-            $table->timestamps();
             $table->unsignedBigInteger('seat_id');
             $table->unsignedBigInteger('room_id');
             $table->primary(['seat_id','room_id']);
             $table->foreign('seat_id')->references('seat_id')->on('seats');
             $table->foreign('room_id')->references('room_id')->on('rooms');
+            $table->timestamps();
         });
     }
 

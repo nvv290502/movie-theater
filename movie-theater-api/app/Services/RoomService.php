@@ -95,4 +95,14 @@ class RoomService
 
         return $this->roomRepositoryInterface->getRoomByCinema($cinemaId, $size);
     }
+
+    public function getRoomIsEnabledByCinema($cinemaId, $size)
+    {
+        $cinema = Cinema::find($cinemaId);
+        if(empty($cinema)){
+            throw new ObjectEmptyException('Rap khong ton tai');
+        }
+
+        return $this->roomRepositoryInterface->getRoomIsEnabledByCinema($cinemaId, $size);
+    }
 }

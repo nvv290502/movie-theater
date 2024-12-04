@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RoomRequest;
+use App\Services\RoomSeatService;
 use App\Services\RoomService;
+use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
     protected $roomService;
+    protected $roomSeatService;
 
-    public function __construct(RoomService $roomService)
+    public function __construct(RoomService $roomService, RoomSeatService $roomSeatService)
     {
         $this->roomService = $roomService;
+        $this->roomSeatService = $roomSeatService;
     }
 
     /**
@@ -96,6 +100,48 @@ class RoomController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Danh sach phong cua rap ' .$cinemaId,
+            'data' => $room
+        ]);
+    }
+
+    public function getRoomIsEnabledByCinema($cinemaId)
+    {
+        $size = request()->get('size');
+        $room = $this->roomService->getRoomIsEnabledByCinema($cinemaId, $size);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach phong cua rap ' .$cinemaId,
+            'data' => $room
+        ]);
+    }
+
+    public function saveLayout($roomId, Request $request)
+    {
+        $roomSeat = $this->roomSeatService->saveLayout($roomId, $request);
+
+        if($roomSeat){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Tao lay out phong thanh cong',
+            ]);
+        }
+        return response()->json([
+            'status' => 500,
+            'message' => 'Tao lay out phong that bai',
+        ]);
+    }
+
+    public function updateInitialization($roomId)
+    {
+        $rowNumber = request()->get('rowNumber');
+        $columnNumber = request()->get('columnNumber');
+
+        $room = $this->roomSeatService->updateInitialization($roomId, $rowNumber, $columnNumber);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cap nhat trang thai khoi tao thanh cong',
             'data' => $room
         ]);
     }
