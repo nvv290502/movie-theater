@@ -30,4 +30,15 @@ class ShowTimeController extends Controller
             'data' => $showtime
         ]);
     }
+
+    public function saveShowtime(Request $request)
+    {
+        $showtime = $this->showtimeService->saveShowtime($request);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Luu lich thanh cong',
+            'data' => $showtime
+        ]);
+    }
 }

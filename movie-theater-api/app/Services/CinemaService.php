@@ -103,6 +103,7 @@ class CinemaService
 
     public function getCinemaByMovieShowtime($movieId, $city, $showDate)
     {
+
         if(empty(Movie::find($movieId))){
             throw new ObjectEmptyException('Ban chua nhap id hoac id khong ton tai');
         }

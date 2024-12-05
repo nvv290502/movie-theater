@@ -7,8 +7,11 @@ use App\Exceptions\InvalidInputException;
 use App\Exceptions\InvalidNumbericException;
 use App\Exceptions\ObjectEmptyException;
 use App\Models\Room;
+use App\Models\Schedule;
 use App\Repositories\Schedule\ScheduleRepositoryInterface;
 use DateTime;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class ScheduleService
 {
@@ -51,5 +54,10 @@ class ScheduleService
         }
 
         return $this->scheduleRepositoryInterface->getScheduleByRoom($roomId);
+    }
+
+    public function saveOrUpdateSchedule(Request $request)
+    {
+        return $this->scheduleRepositoryInterface->saveOrUpdate($request);
     }
 }

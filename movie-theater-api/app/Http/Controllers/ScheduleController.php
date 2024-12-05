@@ -26,7 +26,13 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $schedule = $this->scheduleSerive->saveOrUpdateSchedule($request);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cap nhat lich chieu thanh cong',
+            'data' => $schedule
+        ]);
     }
 
     /**

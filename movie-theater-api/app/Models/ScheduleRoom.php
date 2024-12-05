@@ -9,7 +9,8 @@ class ScheduleRoom extends Model
 {
     use HasFactory;
     protected $primaryKey = ['schedule_id', 'room_id'];
-    protected $tabel = 'schedule_room';
+    protected $table = 'schedule_room';
+    protected $fillable = ['room_id','schedule_id','price'];
 
     public function billDetail()
     {

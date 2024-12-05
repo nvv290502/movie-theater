@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('schedule_id');
             $table->date('schedule_date');
             $table->time('schedule_time');
+            $table->time('time_end');
             $table->unsignedBigInteger('movie_id');
             $table->foreign('movie_id')->references('movie_id')->on('movies');
             $table->timestamps();

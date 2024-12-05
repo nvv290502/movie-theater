@@ -2,11 +2,12 @@
 
 namespace App\Repositories\Showtime;
 
-use App\Models\Room;
 use App\Models\ScheduleRoom;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
-class ShowtimeRepository
+class ShowtimeRepository implements ShowtimeRepositoryInterface
 {
     public function getShowtimeByMovie($movieId)
     {
@@ -25,5 +26,28 @@ class ShowtimeRepository
         return ScheduleRoom::where('schedule_id', $scheduleId)
             ->where('room_id', $roomId)
             ->first();
+    }
+
+    public function saveShowtime(Request $request)
+    {
+        Log::info([
+            'schedule_id' => $request->scheduleId,
+            'room_id' => $request->roomId,
+            'price' => 0.00,
+        ]);
+        
+        return ScheduleRoom::create(
+            [
+                'schedule_id' => $request->scheduleId,
+                'room_id' => $request->roomId,
+                'price' => 0
+            ]
+        );
+
+        // return DB::table('schedule_room')->insert([
+        //     'schedule_id' => $request->scheduleId,
+        //     'room_id' => $request->roomId,
+        //     'price' => 0.00
+        // ]);
     }
 }

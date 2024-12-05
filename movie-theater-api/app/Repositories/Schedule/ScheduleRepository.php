@@ -4,6 +4,7 @@ namespace App\Repositories\Schedule;
 
 use App\Models\Schedule;
 use App\Models\ScheduleRoom;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ScheduleRepository implements ScheduleRepositoryInterface
@@ -66,5 +67,37 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             ->where('sr.room_id', $roomId)
             ->select('sch.schedule_id', 'm.movie_id', 'm.poster_url', 'sch.schedule_date', 'sch.schedule_time', 'm.duration', 'm.movie_name')
             ->get();
+    }
+
+    public function saveOrUpdate(Request $request)
+    {
+        return Schedule::updateOrCreate(
+            [
+                'movie_id' => $request->movieId,
+                'schedule_date' => $request->date,
+                'schedule_time' => $request->time,
+            ],
+            [
+                'schedule_date' => $request->date,
+                'schedule_time' => $request->time,
+                'time_end' => $request->end,
+            ]
+        );
+    }
+
+    public function checkExistsSchedule(Request $request)
+    {
+        return Schedule::where('movie_id', $request->movieId)
+            ->where('schedule_date', $request->date)
+            ->where('schedule_time', $request->time)
+            ->exists();
+    }
+
+    public function getExistsSchedule(Request $request)
+    {
+        return Schedule::where('movie_id', $request->movieId)
+            ->where('schedule_date', $request->date)
+            ->where('schedule_time', $request->time)
+            ->first();
     }
 }

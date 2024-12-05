@@ -116,14 +116,14 @@ class MovieController extends Controller
     {
         $categoryIds = $request->get('categoryIds');
 
-        $movie = $this->movieService->getMovieListCategoryIds($categoryIds);
+        $movie = $this->movieService->getMovieListCategoryIds($categoryIds);        
 
         return response()->json([
             'status' => 200,
             'message' => 'Danh sach phim lien quan',
             'data' => $movie->load('categories')
         ]); 
-    }
+    }                                                                                                                                                                                                                                    
 
     public function getMovieByShowTime(Request $request)
     {

@@ -9,6 +9,7 @@ class Schedule extends Model
 {
     use HasFactory;
     protected $primaryKey = 'schedule_id';
+    protected $fillable = ['movie_id','schedule_date','schedule_time','schedule_id'];
 
     public function movies()
     {

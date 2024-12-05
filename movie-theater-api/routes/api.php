@@ -57,6 +57,7 @@ Route::resource("schedule", ScheduleController::class);
 Route::get("schedule-byCinema", [ScheduleController::class, 'getScheduleByCinema']);
 Route::get("room/schedule/{roomId}", [ScheduleController::class, 'getScheduleByRoom']);
 
+Route::post("showtime", [ShowTimeController::class, 'saveShowtime']);
 Route::get("showtime", [ShowTimeController::class, 'getShowtimeByMovie']);
 
 Route::resource('seat', SeatController::class);

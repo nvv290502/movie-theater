@@ -32,6 +32,7 @@ class AuthService
             'username' => trim($request->get('username')),
             'password' => trim(Hash::make($request->get('password'))),
             'email' => trim($request->get('email')),
+            'phone' => $request->get('phone'),
             'signup_device' => 'LOCAL',
             'is_enabled' => true,
             'is_confirm' => true,

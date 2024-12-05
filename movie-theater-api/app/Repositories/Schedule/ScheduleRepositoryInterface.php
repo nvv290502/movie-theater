@@ -3,6 +3,8 @@
 
 namespace App\Repositories\Schedule;
 
+use Illuminate\Http\Request;
+
 interface ScheduleRepositoryInterface
 {
     public function getScheduleByCinema($movieId, $city, $showDate, $cinemaId);
@@ -10,4 +12,7 @@ interface ScheduleRepositoryInterface
     public function findByRoomId($roomId);
     public function countTicketBySchedule($scheduleId);
     public function getScheduleByRoom($roomId);
+    public function saveOrUpdate(Request $request);
+    public function checkExistsSchedule(Request $request);
+    public function getExistsSchedule(Request $request);
 }

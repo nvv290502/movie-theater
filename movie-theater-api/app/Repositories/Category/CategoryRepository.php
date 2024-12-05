@@ -38,7 +38,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             ['category_id' => $id],
             [
                 'category_name' => $request->name,
-                'descripton' => $request->description
+                'description' => $request->description
             ]
         );
     }
