@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('room_id');
             $table->string('room_name', 100);
             $table->string('location', 255);
-            $table->enum('room_type', ['2D','3D','IMAX'])->nullable();
+            $table->enum('room_type', ['STANDARD','THREE_D','IMAX'])->nullable();
             $table->tinyInteger('number_seat_column')->nullable();
             $table->tinyInteger('number_seat_row')->nullable();
             $table->boolean('is_enabled')->default(true);

@@ -9,7 +9,7 @@ class MovieRepository implements MovieRepositoryInterface
 {
     public function getAll($size)
     {
-        return Movie::with('categories:category_id')->paginate($size);
+        return Movie::with('categories')->paginate($size);
     }
 
     public function getAllIsEnabled($size, $isEnabled)

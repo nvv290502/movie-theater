@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Exceptions\InvalidInputException;
+use App\Exceptions\ObjectEmptyException;
+use App\Models\Room;
+use App\Models\Schedule;
 use App\Repositories\Showtime\ShowtimeRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -24,6 +27,22 @@ class ShowtimeService
 
     public function saveShowtime(Request $request)
     {
+        $schedule = Schedule::find($request->scheduleId);
+        $room = Room::find($request->roomId);
+
+        if(empty($schedule)){
+            throw new ObjectEmptyException('Schedule khong ton tai');
+        }
+
+        if(empty($room)){
+            throw new ObjectEmptyException('Room khong ton tai');
+        }
+
         return $this->showtimeRepositoryInterface->saveShowtime($request);
+    }
+
+    public function updatePriceTicket($showtimeId, $price)
+    {
+        return $this->showtimeRepositoryInterface->updatePriceTicket($showtimeId, $price);
     }
 }

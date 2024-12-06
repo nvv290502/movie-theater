@@ -9,7 +9,8 @@ class BillDetail extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = ['schedule_id', 'room_id', 'seat_id', 'bill_id'];
+    // protected $primaryKey = ['schedule_id', 'room_id', 'seat_id', 'bill_id'];
+    protected $primaryKey = ['bill_detail_id'];
 
     public function scheduleRoom()
     {

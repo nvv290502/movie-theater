@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unique(['schedule_id', 'room_id']);
             $table->foreign('schedule_id')->references('schedule_id')->on('schedules');
             $table->foreign('room_id')->references('room_id')->on('rooms');
-            $table->float('price');
+            $table->float('price')->nullable();
             $table->timestamps();
         });
     }

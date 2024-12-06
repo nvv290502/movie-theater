@@ -9,7 +9,8 @@ class RoomSeat extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = ['seat_id', 'room_id'];
+    // protected $primaryKey = ['seat_id', 'room_id'];
+    protected $primaryKey = ['room_seat_id'];
     protected $table = 'room_seat';
     protected $fillable = ['seat_id', 'room_id','type_seat'];
     

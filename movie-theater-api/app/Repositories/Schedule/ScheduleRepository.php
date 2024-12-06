@@ -73,11 +73,10 @@ class ScheduleRepository implements ScheduleRepositoryInterface
     {
         return Schedule::updateOrCreate(
             [
-                'movie_id' => $request->movieId,
-                'schedule_date' => $request->date,
-                'schedule_time' => $request->time,
+                'schedule_id' => $request->scheduleId,
             ],
             [
+                'movie_id' => $request->movieId,
                 'schedule_date' => $request->date,
                 'schedule_time' => $request->time,
                 'time_end' => $request->end,
@@ -99,5 +98,18 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             ->where('schedule_date', $request->date)
             ->where('schedule_time', $request->time)
             ->first();
+    }
+
+    public function getListScheduleManager($size)
+    {
+        return DB::table('schedules as sch')
+            ->join('schedule_room as sr', 'sr.schedule_id', 'sch.schedule_id')
+            ->join('rooms as r', 'r.room_id', 'sr.room_id')
+            ->join('cinemas as c', 'c.cinema_id', 'r.room_id')
+            ->join('movies as m','m.movie_id','sch.movie_id')
+            ->select('m.movie_id', 'm.duration', 'r.room_id', 'c.cinema_id', 'sch.schedule_id', 'sch.schedule_date', 'sch.schedule_time', 'sr.price', 'm.movie_name', 'r.room_name', 'c.cinema_name', 'sr.schedule_room_id')
+            ->orderBy('sch.schedule_date','desc')
+            ->orderBy('sch.schedule_time','desc')
+            ->paginate($size);
     }
 }

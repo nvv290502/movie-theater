@@ -60,4 +60,9 @@ class ScheduleService
     {
         return $this->scheduleRepositoryInterface->saveOrUpdate($request);
     }
+
+    public function getListScheduleManager($size)
+    {
+        return $this->scheduleRepositoryInterface->getListScheduleManager($size);
+    }
 }

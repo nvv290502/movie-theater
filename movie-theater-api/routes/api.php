@@ -58,9 +58,11 @@ Route::get("schedule-byCinema", [ScheduleController::class, 'getScheduleByCinema
 Route::get("room/schedule/{roomId}", [ScheduleController::class, 'getScheduleByRoom']);
 
 Route::post("showtime", [ShowTimeController::class, 'saveShowtime']);
-Route::get("showtime", [ShowTimeController::class, 'getShowtimeByMovie']);
+Route::get("showtime/{movieId}", [ShowTimeController::class, 'getShowtimeByMovie']);
+Route::post("showtime/update-price", [ShowTimeController::class, 'updatePriceTicket']);
 
 Route::resource('seat', SeatController::class);
+Route::get("room/seat/{roomId}", [SeatController::class, 'getSeatByRoom']);
 Route::get("seat-byRoom/{roomId}", [SeatController::class, 'getSeatByRoom']);
 Route::post("seat/update-status/{roomId}", [SeatController::class, 'updateStatusSeat']);
 

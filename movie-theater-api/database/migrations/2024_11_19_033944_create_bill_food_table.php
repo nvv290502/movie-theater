@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bill_food', function (Blueprint $table) {
+            $table->bigIncrements('bill_food_id');
             $table->unsignedBigInteger('bill_id');
             $table->unsignedBigInteger('food_id');
-            $table->primary(['bill_id', 'food_id']);
+            $table->unique(['bill_id', 'food_id']);
             $table->foreign('bill_id')->references('bill_id')->on('bills');
             $table->foreign('food_id')->references('food_id')->on('foods');
             $table->float('price');

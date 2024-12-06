@@ -18,7 +18,15 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        $size = request()->get('size');
+
+        $result = $this->scheduleSerive->getListScheduleManager($size);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sach lich chieu',
+            'data' => $result
+        ]);
     }
 
     /**

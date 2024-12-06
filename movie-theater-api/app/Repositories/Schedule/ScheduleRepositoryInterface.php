@@ -15,4 +15,5 @@ interface ScheduleRepositoryInterface
     public function saveOrUpdate(Request $request);
     public function checkExistsSchedule(Request $request);
     public function getExistsSchedule(Request $request);
+    public function getListScheduleManager($size);
 }

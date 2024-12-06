@@ -41,4 +41,18 @@ class ShowTimeController extends Controller
             'data' => $showtime
         ]);
     }
+
+    public function updatePriceTicket()
+    {
+        $showtimeId = request()->get('showtimeId');
+        $price = request()->get('price');
+
+        $showtime = $this->showtimeService->updatePriceTicket($showtimeId, $price);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cap nhat gia ve thanh cong',
+            'data' => $showtime
+        ]);
+    }
 }

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MovieRequest;
-use App\Services\ImageService;
+use App\Http\Resources\MovieCollection;
+use App\Http\Resources\MovieResource;
 use App\Services\MovieService;
 use Illuminate\Http\Request;
 
@@ -24,12 +25,15 @@ class MovieController extends Controller
         $isEnabled = request()->get('isEnabled');
 
         $movie = $this->movieService->getAll($size, $isEnabled);
-        return response()->json([
-            'status' => 200,
-            'message' => 'Danh sách phim',
-            'data' => $movie
-        ]);
-    }
+
+        return apiResponse(new MovieCollection($movie), 'Lay danh sach phim thanh cong', 200);
+
+        // return response()->json([
+        //     'status' => 200,
+        //     'message' => 'Danh sách phim',
+        //     'data' => new MovieCollection($movie),
+        // ]);
+    } 
 
     /**
      * Store a newly created resource in storage.
@@ -43,7 +47,7 @@ class MovieController extends Controller
             return response()->json([
                 'status' => 201,
                 'message' => 'Thêm mới phim thành công',
-                'data' => $movie->load('categories')
+                'data' => new MovieResource($movie)
             ]);
         }
     }
@@ -58,7 +62,7 @@ class MovieController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Phim có id là ' . $id,
-            'data' => $movie->load('categories')
+            'data' => new MovieResource($movie)
         ]);
     }
 
@@ -84,7 +88,7 @@ class MovieController extends Controller
     public function destroy(string $id)
     {
         $movie = $this->movieService->isEnabled($id);
-        
+
         return response()->json([
             'status' => 200,
             'message' => 'Cap nhat trang thai phim co id la ' . $id . ' thanh cong',
@@ -92,7 +96,8 @@ class MovieController extends Controller
         ]);
     }
 
-    public function getUpcomingMovie(){
+    public function getUpcomingMovie()
+    {
         $movie = $this->movieService->getUpcomingMovie();
 
         return response()->json([
@@ -102,28 +107,29 @@ class MovieController extends Controller
         ]);
     }
 
-    public function movieShowToday(){
+    public function movieShowToday()
+    {
         $movie = $this->movieService->movieShowByDate(date('Y-m-d'));
 
         return response()->json([
             'status' => 200,
             'message' => 'Danh sach phim chieu hom nay',
             'data' => $movie
-        ]); 
+        ]);
     }
 
     public function getMovieRelated(Request $request)
     {
         $categoryIds = $request->get('categoryIds');
 
-        $movie = $this->movieService->getMovieListCategoryIds($categoryIds);        
+        $movie = $this->movieService->getMovieListCategoryIds($categoryIds);
 
         return response()->json([
             'status' => 200,
             'message' => 'Danh sach phim lien quan',
             'data' => $movie->load('categories')
-        ]); 
-    }                                                                                                                                                                                                                                    
+        ]);
+    }
 
     public function getMovieByShowTime(Request $request)
     {
@@ -137,7 +143,7 @@ class MovieController extends Controller
             'status' => 200,
             'message' => 'Danh sach phim theo suat chieu',
             'data' => $movie
-        ]); 
+        ]);
     }
 
     public function getListName()
