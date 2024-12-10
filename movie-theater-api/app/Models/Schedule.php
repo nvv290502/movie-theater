@@ -20,4 +20,9 @@ class Schedule extends Model
     {
         return $this->belongsToMany(Room::class, 'schedule_room','schedule_id','room_id')->using(ScheduleRoom::class);
     }
+
+    public function scheduleRoom()
+    {
+        return $this->hasMany(ScheduleRoom::class, 'schedule_id');
+    }
 }

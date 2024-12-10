@@ -52,7 +52,7 @@ class MovieRepository implements MovieRepositoryInterface
         $data = [
             'movie_name' => $request['name'],
             'duration' => $request['duration'],
-            'releaseDate' => $request['releaseDate'],
+            'release_date' => $request['releaseDate'],
             'author' => $request['author'],
             'actor' => $request['actor'],
             'trailer' => $request['trailer'],
@@ -84,7 +84,7 @@ class MovieRepository implements MovieRepositoryInterface
     public function getUpcomingMovie()
     {
         return Movie::where('release_date', '>', now())
-            ->where('release_date', '<', now()->addDays(7))
+            ->where('release_date', '<=', now()->addDays(7))
             ->get();
     }
 

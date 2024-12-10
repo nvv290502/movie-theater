@@ -30,13 +30,12 @@ class ShowtimeRepository implements ShowtimeRepositoryInterface
 
     public function saveShowtime(Request $request)
     {
-        Log::info([
-            'schedule_id' => $request->scheduleId,
-            'room_id' => $request->roomId,
-            'price' => 0.00,
-        ]);
-        
-        return ScheduleRoom::create(
+
+        return ScheduleRoom::updateOrCreate(
+            [
+                'schedule_id' => $request->scheduleId,
+                'room_id' => $request->roomId,
+            ],
             [
                 'schedule_id' => $request->scheduleId,
                 'room_id' => $request->roomId,

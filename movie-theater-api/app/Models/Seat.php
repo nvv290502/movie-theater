@@ -17,6 +17,6 @@ class Seat extends Model
 
     public function billDetail()
     {
-        return $this->belongsTo(BillDetail::class);
+        return $this->hasMany(BillDetail::class, 'seat_id', 'seat_id');
     }
 }

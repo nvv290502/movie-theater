@@ -15,11 +15,11 @@ return new class extends Migration
             $table->bigIncrements('schedule_room_id');
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('room_id');
-            $table->unique(['schedule_id', 'room_id']);
             $table->foreign('schedule_id')->references('schedule_id')->on('schedules');
             $table->foreign('room_id')->references('room_id')->on('rooms');
             $table->float('price')->nullable();
             $table->timestamps();
+            $table->unique(['schedule_id', 'room_id']);
         });
     }
 

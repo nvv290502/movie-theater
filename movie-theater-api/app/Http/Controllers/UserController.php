@@ -10,6 +10,7 @@ use App\Services\ImageService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Mockery\Undefined;
 
 class UserController extends Controller
 {
@@ -22,10 +23,11 @@ class UserController extends Controller
 
     public function index()
     {
-        return new UserCollection(User::paginate());
+        $size = request()->get('size');
+        return new UserCollection(User::paginate($size));
     }
 
-    public function get($id)
+    public function show($id)
     {
 
         $this->isNumeric($id);
@@ -49,12 +51,12 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         $this->isNumeric($id);
+        $data = $request->all();
 
         try {
             $user = User::find($id);
             if ($request->hasFile('avatar_url')) {
                 $imagePath = $this->imageService->imageUpload($request->file('avatar_url'));
-                $data = $request->all();
                 $data['avatar_url'] = $imagePath;
             }
             $user->update($data);
@@ -71,7 +73,7 @@ class UserController extends Controller
         }
     }
 
-    public function isEnabled(Request $request, $id)
+    public function isEnabled($id)
     {
 
         $this->isNumeric($id);
@@ -85,7 +87,7 @@ class UserController extends Controller
             ], 404);
         }
 
-        $user->update(['is_enabled' => (bool) $request['isEnabled']]);
+        $user->update(['is_enabled' => !$user->is_enabled]);
 
         return response()->json([
             'status' => 202,

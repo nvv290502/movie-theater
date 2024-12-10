@@ -59,7 +59,7 @@ class AuthService
             'refresh_token' => $refreshToken,
             'role' => $role,
             'token_type' => 'bearer',
-            'expires_in' => config('jwt.ttl') * 60,
+            'expires_in' => config('jwt.ttl') * 600,
         ]);
     }
 

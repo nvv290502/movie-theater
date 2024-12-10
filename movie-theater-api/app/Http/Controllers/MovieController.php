@@ -26,13 +26,13 @@ class MovieController extends Controller
 
         $movie = $this->movieService->getAll($size, $isEnabled);
 
-        return apiResponse(new MovieCollection($movie), 'Lay danh sach phim thanh cong', 200);
+        // return apiResponse(new MovieCollection($movie), 'Lay danh sach phim thanh cong', 200);
 
-        // return response()->json([
-        //     'status' => 200,
-        //     'message' => 'Danh sách phim',
-        //     'data' => new MovieCollection($movie),
-        // ]);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sách phim',
+            'data' => $movie,
+        ]);
     } 
 
     /**
@@ -62,7 +62,7 @@ class MovieController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Phim có id là ' . $id,
-            'data' => new MovieResource($movie)
+            'data' => $movie->load('categories')
         ]);
     }
 

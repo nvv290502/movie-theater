@@ -16,7 +16,7 @@ class Bill extends Model
     }
 
     public function billDetail(){
-        return $this->belongsTo(BillDetail::class);
+        return $this->hasMany(BillDetail::class,'bill_id');
     }
 
     public function billFood(){

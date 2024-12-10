@@ -24,4 +24,10 @@ class Room extends Model
     {
         return $this->belongsToMany(Seat::class)->using(RoomSeat::class);
     }
+
+    public function scheduleRoom(){
+        return $this->hasMany(ScheduleRoom::class, 'room_id', 'room_id');
+    }
+
+
 }

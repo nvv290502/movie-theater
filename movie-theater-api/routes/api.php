@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BillDetailController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,7 @@ use App\Http\Controllers\ShowTimeController;
 use App\Http\Controllers\UserController;
 use App\Models\Category;
 use App\Models\Movie;
+use App\Models\Role;
 use App\Models\Seat;
 use Illuminate\Support\Facades\Route;
 
@@ -31,40 +33,62 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::post('auth/register', [AuthController::class, 'register']);
 
-Route::resource("category", CategoryController::class);
-Route::get("list-category-name", [CategoryController::class, 'getListName']);
-Route::get("category-search/{name}",[CategoryController::class, 'getByName']);
+Route::prefix('category')->group(function () {
+    Route::resource("/", CategoryController::class);
+    Route::get("{id}", [CategoryController::class, 'show'])->where('id', '[0-9]+');
+    Route::get("list-name", [CategoryController::class, 'getListName']);
+    Route::get("search/{name}", [CategoryController::class, 'getByName']);
+});
+  
+Route::prefix('cinema')->group(function () {
+    Route::resource("/", CinemaController::class);
+    Route::get("{id}", [CinemaController::class, 'show'])->where('id', '[0-9]+');
+    Route::get("showtime", [CinemaController::class, 'getCinemaByMovieShowtime']);
+});
 
-Route::resource("cinema", CinemaController::class);
-Route::get("cinema-showtime", [CinemaController::class, 'getCinemaByMovieShowtime']);
+Route::prefix('room')->group(function () {
+    Route::resource("/", RoomController::class);
+    // Route::get("{id}", [RoomController::class, 'show'])->where('id', '[0-9]+');
+    Route::get("cinema/{cinemaId}", [RoomController::class, 'getRoomByCinema'])->where('cinemaId', '[0-9]+');
+    Route::post("save-layout/{roomId}", [RoomController::class, 'saveLayout'])->where('roomId', '[0-9]+');
+    Route::post("update-initialization/{roomId}", [RoomController::class, 'updateInitialization'])->where('roomId', '[0-9]+');
+    Route::get("is-enabled/cinema/{cinemaId}", [RoomController::class, 'getRoomIsEnabledByCinema'])->where('cinemaId','[0-9]+');
+});
 
-Route::resource("room", RoomController::class);
-Route::get("room-byCinema/{cinemaId}", [RoomController::class, 'getRoomByCinema']);
-Route::get("isEnabled/cinema/room/{cinemaId}", [RoomController::class, 'getRoomIsEnabledByCinema']);
-Route::post("room/save-layout/{roomId}", [RoomController::class, 'saveLayout']);
-Route::post("room/update-initialization/{roomId}", [RoomController::class, 'updateInitialization']);
+Route::prefix('movie')->group(function () {
+    Route::resource("/", MovieController::class);
+    Route::put("{id}", [MovieController::class, 'update'])->where('id','[0-9]+');
+    Route::get("{id}", [MovieController::class, 'show'])->where('id', '[0-9]+');
+    Route::get("upcoming", [MovieController::class, 'getUpcomingMovie']);
+    Route::get("show-today", [MovieController::class, 'movieShowToday']);
+    Route::get("related", [MovieController::class, 'getMovieRelated']);
+    Route::get("showtime", [MovieController::class, 'getMovieByShowTime']);
+    Route::get("list-name", [MovieController::class, 'getListName']);
+    Route::get("search/{name}", [MovieController::class, 'getByName']);
+    Route::get("showing", [MovieController::class, 'getMovieIsShowing']);
+});
 
-Route::resource("movie", MovieController::class);
-Route::get("movie-upcoming", [MovieController::class, 'getUpcomingMovie']);
-Route::get("/movie-show-today", [MovieController::class, 'movieShowToday']);
-Route::get("/movie-related", [MovieController::class, 'getMovieRelated']);
-Route::get("/movie-showtime", [MovieController::class, 'getMovieByShowTime']);
-Route::get("list-movie-name", [MovieController::class, 'getListName']);
-Route::get("movie-search/{name}",[MovieController::class, 'getByName']);
-Route::get("showing/movie", [MovieController::class, 'getMovieIsShowing']);
+Route::prefix('schedule')->group(function () {
+    Route::resource("/", ScheduleController::class);
+    Route::get("{id}", [ScheduleController::class, 'show'])->where('id', '[0-9]+');
+    Route::get("cinema", [ScheduleController::class, 'getScheduleByCinema']);
+    Route::get("room/{roomId}", [ScheduleController::class, 'getScheduleByRoom']);
+});
 
-Route::resource("schedule", ScheduleController::class);
-Route::get("schedule-byCinema", [ScheduleController::class, 'getScheduleByCinema']);
-Route::get("room/schedule/{roomId}", [ScheduleController::class, 'getScheduleByRoom']);
+Route::prefix('showtime')->group(function () {
+    Route::post("", [ShowTimeController::class, 'saveShowtime']);
+    Route::get("{movieId}", [ShowTimeController::class, 'getShowtimeByMovie']);
+    Route::post("update-price", [ShowTimeController::class, 'updatePriceTicket']);
+});
 
-Route::post("showtime", [ShowTimeController::class, 'saveShowtime']);
-Route::get("showtime/{movieId}", [ShowTimeController::class, 'getShowtimeByMovie']);
-Route::post("showtime/update-price", [ShowTimeController::class, 'updatePriceTicket']);
+Route::prefix('seat')->group(function(){
+    Route::resource('/', SeatController::class);
+    Route::get('{id}', [SeatController::class, 'show'])->where('id','[0-9]+');
+    Route::get("room/{roomId}", [SeatController::class, 'getSeatByRoom'])->where('roomId','[0-9]+');
+    Route::post("update-status/{roomId}", [SeatController::class, 'updateStatusSeat'])->where('roomId','[0-9]+');
+});
 
-Route::resource('seat', SeatController::class);
-Route::get("room/seat/{roomId}", [SeatController::class, 'getSeatByRoom']);
-Route::get("seat-byRoom/{roomId}", [SeatController::class, 'getSeatByRoom']);
-Route::post("seat/update-status/{roomId}", [SeatController::class, 'updateStatusSeat']);
+Route::get("bill-detail/{billCode}", [BillDetailController::class, 'getBillDetail']);
 
 Route::group([
     'middleware' => 'api',
@@ -76,12 +100,9 @@ Route::group([
     Route::get('/profile', [AuthController::class, 'profile']);
 });
 
-Route::group(['middleware' => 'is.login'], function () {
-    Route::post('/user/{id}', [UserController::class, 'update']);
-});
-
-Route::group(['middleware' => ['is.login', 'is.admin']], function () {
-    Route::get('/user', [UserController::class, 'index']);
-    Route::get('/user/{id}', [UserController::class, 'get']);
-    Route::post('/user/is-enabled/{id}', [UserController::class, 'isEnabled']);
+Route::prefix('user')->middleware(['is.login', 'is.admin'])->group(function(){
+    Route::resource('/', UserController::class);
+    Route::get("{id}", [UserController::class, 'get'])->where('id','[0-9]+');
+    Route::post('is-enabled/{id}', [UserController::class, 'isEnabled'])->where('id','[0-9]+');
+    Route::post('{id}', [UserController::class, 'update'])->where('id', '[0-9]+')->withoutMiddleware(\App\Http\Middleware\CheckRoleAdmin::class);
 });

@@ -15,6 +15,14 @@ class ScheduleRoom extends Model
 
     public function billDetail()
     {
-        return $this->belongsToMany(BillDetail::class);
+        return $this->hasMany(BillDetail::class, 'schedule_room_id','schedule_room_id');
+    }
+
+    public function rooms(){
+        return $this->belongsTo(Room::class, 'room_id', 'room_id');
+    }
+
+    public function schedules(){
+        return $this->belongsTo(Schedule::class, 'schedule_id');
     }
 }

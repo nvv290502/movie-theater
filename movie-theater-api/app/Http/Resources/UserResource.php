@@ -23,7 +23,12 @@ class UserResource extends JsonResource
             'is_enabled' => $this->is_enabled,
             'member_ship_level' => $this->member_ship_level,
             'role_id'=> $this->roles->role_id,
-            'role_name'=> $this->roles->role_name
+            'role_name'=> $this->roles->role_name,
+            'dob' => $this->date_of_birth,
+            'avatar_url' => $this->avatar_url,
+            'is_confirm' => $this->is_confirm,
+            'created_at' => $this->created_at,
+            'full_name' => $this->full_name
         ];
     }
 
