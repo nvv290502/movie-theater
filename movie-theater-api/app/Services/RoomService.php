@@ -105,4 +105,9 @@ class RoomService
 
         return $this->roomRepositoryInterface->getRoomIsEnabledByCinema($cinemaId, $size);
     }
+
+    public function getRoomByShowtime($movieId, $showTime, $showDate, $cinemaId)
+    {
+        return $this->roomRepositoryInterface->getRoomByShowtime($movieId, $showTime, $showDate, $cinemaId);
+    }
 }

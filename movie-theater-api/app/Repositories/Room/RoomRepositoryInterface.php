@@ -15,4 +15,5 @@ interface RoomRepositoryInterface
     public function existsRoom($roomName);
     public function getRoomByCinema($cinemaId, $size);
     public function getRoomIsEnabledByCinema($cinemaId, $size);
+    public function getRoomByShowtime($movieId, $showTime, $showDate, $cinemaId);
 }

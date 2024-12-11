@@ -101,6 +101,7 @@ class CinemaController extends Controller
             return response()->json([
                 'status' => 204,
                 'message' => 'Hien tai phim chua co suat chieu trong khung gio nay',
+                'data' => []
             ]);
         }
         return response()->json([

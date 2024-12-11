@@ -145,4 +145,11 @@ class RoomController extends Controller
             'data' => $room
         ]);
     }
+
+    public function getRoomByShowtime(Request $request)
+    {
+        $room = $this->roomService->getRoomByShowtime($request['movieId'], $request['showTime'], $request['showDate'], $request['cinemaId']);
+
+        return apiResponse($room, 'Danh sach phong theo co suat chieu', 200);
+    }
 }

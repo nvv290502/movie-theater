@@ -70,7 +70,7 @@ class CinemaRepository implements CinemaRepositoryInterface
                 $query->where('c.address', 'like', '%' . $city . '%');
             })
             ->when($showDate, function ($query, $showDate) {
-                $query->whereDate('sch.schedule_date', '=', $showDate);
+                $query->where('sch.schedule_date', $showDate);
             })
             ->select('c.*', 'sch.schedule_date', 'sch.schedule_time')
             ->distinct()

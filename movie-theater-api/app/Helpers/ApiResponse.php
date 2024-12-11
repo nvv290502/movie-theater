@@ -7,6 +7,6 @@ if (!function_exists('apiResponse')) {
             'status' => $status,
             'message' => $message,
             'content' => $data,
-        ]);
+        ], $status);
     }
 }

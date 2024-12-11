@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SeatController;
@@ -42,6 +43,7 @@ Route::prefix('category')->group(function () {
   
 Route::prefix('cinema')->group(function () {
     Route::resource("/", CinemaController::class);
+    Route::put("{cinema}", [CinemaController::class, 'update'])->where('cinema', '[0-9]+');
     Route::get("{id}", [CinemaController::class, 'show'])->where('id', '[0-9]+');
     Route::get("showtime", [CinemaController::class, 'getCinemaByMovieShowtime']);
 });
@@ -53,6 +55,7 @@ Route::prefix('room')->group(function () {
     Route::post("save-layout/{roomId}", [RoomController::class, 'saveLayout'])->where('roomId', '[0-9]+');
     Route::post("update-initialization/{roomId}", [RoomController::class, 'updateInitialization'])->where('roomId', '[0-9]+');
     Route::get("is-enabled/cinema/{cinemaId}", [RoomController::class, 'getRoomIsEnabledByCinema'])->where('cinemaId','[0-9]+');
+    Route::get("show-time",[RoomController::class, 'getRoomByShowtime']);
 });
 
 Route::prefix('movie')->group(function () {
@@ -86,6 +89,12 @@ Route::prefix('seat')->group(function(){
     Route::get('{id}', [SeatController::class, 'show'])->where('id','[0-9]+');
     Route::get("room/{roomId}", [SeatController::class, 'getSeatByRoom'])->where('roomId','[0-9]+');
     Route::post("update-status/{roomId}", [SeatController::class, 'updateStatusSeat'])->where('roomId','[0-9]+');
+});
+
+Route::prefix('review')->group(function(){
+    Route::resource("/", ReviewController::class);
+    Route::get("statistics/{movieId}", [ReviewController::class, 'getMovieReviewInfo'])->where('movieId','[0-9]+');
+    Route::get("fillter", [ReviewController::class, 'getReviewByMovieOrUser']);
 });
 
 Route::get("bill-detail/{billCode}", [BillDetailController::class, 'getBillDetail']);

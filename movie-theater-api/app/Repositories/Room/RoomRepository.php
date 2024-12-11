@@ -54,4 +54,29 @@ class RoomRepository implements RoomRepositoryInterface
     {
         return Room::where('cinema_id', $cinemaId)->where('is_enabled',1)->paginate($size);
     }
+
+    public function getRoomByShowtime($movieId, $showTime, $showDate, $cinemaId)
+    {
+        $query =  Room::whereHas('scheduleRoom.schedules.movies', function($query) use ($movieId){
+            $query->where('movie_id', $movieId);
+        })
+        ->when($showTime, function($query) use ($showTime){
+            $query->whereHas('scheduleRoom.schedules', function($subquery) use($showTime){
+                $subquery->where('schedule_time', $showTime);
+            });
+        })
+        ->when($showDate, function($query) use ($showDate){
+            $query->whereHas('scheduleRoom.schedules', function($subquery) use($showDate){
+                $subquery->where('schedule_date', $showDate);
+            });
+        })
+        ->when($cinemaId, function($query) use ($cinemaId){
+            $query->whereHas('cinemas', function($subquery) use ($cinemaId){
+                $subquery->where('cinema_id', $cinemaId);
+            });
+        });
+
+        $sql = $query->toSql();
+        dd($sql);
+    }
 }
