@@ -55,4 +55,15 @@ class ShowTimeController extends Controller
             'data' => $showtime
         ]);
     }
+
+    public function getPriceTicket(Request $request)
+    {
+        $price = $this->showtimeService->getPriceTicket($request['movieId'], $request['showDate'], $request['showTime'], $request['roomId']);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Thong tin gia ve',
+            'data' => $price
+        ]);
+    }
 }

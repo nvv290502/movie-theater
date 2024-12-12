@@ -26,7 +26,7 @@ class Room extends Model
     }
 
     public function scheduleRoom(){
-        return $this->hasMany(ScheduleRoom::class, 'room_id', 'room_id');
+        return $this->hasMany(ScheduleRoom::class, 'room_id');
     }
 
 

@@ -6,16 +6,19 @@ use App\Exceptions\InvalidInputException;
 use App\Exceptions\ObjectEmptyException;
 use App\Models\Room;
 use App\Models\Schedule;
+use App\Repositories\Schedule\ScheduleRepository;
 use App\Repositories\Showtime\ShowtimeRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ShowtimeService
 {
     protected $showtimeRepositoryInterface;
+    protected $scheduleRepository;
 
-    public function __construct(ShowtimeRepositoryInterface $showtimeRepositoryInterface)
+    public function __construct(ShowtimeRepositoryInterface $showtimeRepositoryInterface, ScheduleRepository $scheduleRepository)
     {
         $this->showtimeRepositoryInterface = $showtimeRepositoryInterface;
+        $this->scheduleRepository = $scheduleRepository;
     }
     public function getShowtimeByMovie($movieId)
     {
@@ -44,5 +47,12 @@ class ShowtimeService
     public function updatePriceTicket($showtimeId, $price)
     {
         return $this->showtimeRepositoryInterface->updatePriceTicket($showtimeId, $price);
+    }
+
+    public function getPriceTicket($movieId, $showDate, $showTime, $roomId)
+    {
+        $schedule = $this->scheduleRepository->getScheduleByMovieAndShowDateAndShowTime($movieId, $showDate, $showTime);
+
+        return $this->showtimeRepositoryInterface->getPriceTicket($schedule->schedule_id, $roomId);
     }
 }

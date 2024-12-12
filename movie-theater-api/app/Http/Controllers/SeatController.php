@@ -76,4 +76,10 @@ class SeatController extends Controller
             'message' => 'Cap nhat trang thai ghe thanh cong',
         ]);
     }
+    public function getSeatByBillDetail(Request $request)
+    {
+        $seatIds = $this->seatService->getSeatByBillDetail($request['movieId'], $request['roomId'], $request['showDate'], $request['showTime'], $request['userId']);
+
+        return apiResponse($seatIds, 'Danh sach ghe da dat', 200);
+    }
 }

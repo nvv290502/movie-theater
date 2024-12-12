@@ -19,7 +19,7 @@ class ScheduleRoom extends Model
     }
 
     public function rooms(){
-        return $this->belongsTo(Room::class, 'room_id', 'room_id');
+        return $this->belongsTo(Room::class, 'room_id');
     }
 
     public function schedules(){

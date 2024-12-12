@@ -21,4 +21,9 @@ class SeatService{
 
         return $this->seatRepositoryInterface->getSeatByRoom($roomId);
     }
+
+    public function getSeatByBillDetail($movieId, $roomId, $showDate, $showTime, $userId)
+    {
+        return $this->seatRepositoryInterface->getSeatByBillDetail($movieId, $roomId, $showDate, $showTime, $userId);
+    }
 }

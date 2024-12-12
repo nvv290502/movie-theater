@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\BillDetailController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CinemaController;
@@ -50,7 +51,7 @@ Route::prefix('cinema')->group(function () {
 
 Route::prefix('room')->group(function () {
     Route::resource("/", RoomController::class);
-    // Route::get("{id}", [RoomController::class, 'show'])->where('id', '[0-9]+');
+    Route::get("{id}", [RoomController::class, 'show'])->where('id', '[0-9]+');
     Route::get("cinema/{cinemaId}", [RoomController::class, 'getRoomByCinema'])->where('cinemaId', '[0-9]+');
     Route::post("save-layout/{roomId}", [RoomController::class, 'saveLayout'])->where('roomId', '[0-9]+');
     Route::post("update-initialization/{roomId}", [RoomController::class, 'updateInitialization'])->where('roomId', '[0-9]+');
@@ -79,9 +80,10 @@ Route::prefix('schedule')->group(function () {
 });
 
 Route::prefix('showtime')->group(function () {
-    Route::post("", [ShowTimeController::class, 'saveShowtime']);
-    Route::get("{movieId}", [ShowTimeController::class, 'getShowtimeByMovie']);
+    Route::post("/", [ShowTimeController::class, 'saveShowtime']);
+    Route::get("{movieId}", [ShowTimeController::class, 'getShowtimeByMovie'])->where('movieId', '[0-9]+');
     Route::post("update-price", [ShowTimeController::class, 'updatePriceTicket']);
+    Route::get("price", [ShowTimeController::class, 'getPriceTicket']);
 });
 
 Route::prefix('seat')->group(function(){
@@ -89,12 +91,17 @@ Route::prefix('seat')->group(function(){
     Route::get('{id}', [SeatController::class, 'show'])->where('id','[0-9]+');
     Route::get("room/{roomId}", [SeatController::class, 'getSeatByRoom'])->where('roomId','[0-9]+');
     Route::post("update-status/{roomId}", [SeatController::class, 'updateStatusSeat'])->where('roomId','[0-9]+');
+    Route::get("bill", [SeatController::class, 'getSeatByBillDetail']);
 });
 
 Route::prefix('review')->group(function(){
     Route::resource("/", ReviewController::class);
     Route::get("statistics/{movieId}", [ReviewController::class, 'getMovieReviewInfo'])->where('movieId','[0-9]+');
     Route::get("fillter", [ReviewController::class, 'getReviewByMovieOrUser']);
+});
+
+Route::prefix('bill')->group(function(){
+    Route::post("", [BillController::class, 'saveBill']);
 });
 
 Route::get("bill-detail/{billCode}", [BillDetailController::class, 'getBillDetail']);

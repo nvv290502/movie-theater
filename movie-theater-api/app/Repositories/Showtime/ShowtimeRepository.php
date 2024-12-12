@@ -54,4 +54,9 @@ class ShowtimeRepository implements ShowtimeRepositoryInterface
     {
         return ScheduleRoom::where('schedule_room_id', $showtimeId)->update(['price' => $price]);
     }
+
+    public function getPriceTicket($scheduleId, $roomId)
+    {
+        return ScheduleRoom::where('schedule_id', $scheduleId)->where('room_id', $roomId)->first();
+    }
 }

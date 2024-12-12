@@ -10,4 +10,5 @@ interface ShowtimeRepositoryInterface
     public function getShowtimeByRoomAndSchedule($roomId, $scheduleId);
     public function saveShowtime(Request $request);
     public function updatePriceTicket($showtimeId, $price);
+    public function getPriceTicket($scheduleId, $roomId);
 }

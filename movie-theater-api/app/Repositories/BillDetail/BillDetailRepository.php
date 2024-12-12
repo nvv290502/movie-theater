@@ -46,4 +46,9 @@ class BillDetailRepository
     //     })
     //     ->when()
     // }
+
+    public function getBillDetailByRoomBySeatBySchedule($roomId, $seatId, $scheduleId)
+    {
+        return BillDetail::where('room_id', $roomId)->where('seat_id', $seatId)->where('schedule_id', $scheduleId)->exists();
+    }
 }
