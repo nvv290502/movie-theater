@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ScheduleController;
@@ -18,6 +19,7 @@ use App\Models\Movie;
 use App\Models\Role;
 use App\Models\Seat;
 use Illuminate\Support\Facades\Route;
+use PhpParser\Lexer\TokenEmulator\ReverseEmulator;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +106,13 @@ Route::prefix('bill')->group(function(){
     Route::post("", [BillController::class, 'saveBill']);
 });
 
+Route::prefix('revenue')->group(function(){
+    Route::get('year', [RevenueController::class, 'getYearRevenue']);
+    Route::get('month', [RevenueController::class, 'getMonthRevenue']);
+    Route::get('daily', [RevenueController::class, 'getDailyRevenue']);
+    Route::get('hours', [RevenueController::class, 'getHoursRevenue']);
+});
+// Route::get('revenue-year', [RevenueController::class, 'getYearRevenue']);
 Route::get("bill-detail/{billCode}", [BillDetailController::class, 'getBillDetail']);
 
 Route::group([
