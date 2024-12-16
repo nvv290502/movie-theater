@@ -40,7 +40,6 @@ class MovieController extends Controller
      */
     public function store(MovieRequest $request)
     {
-
         $movie = $this->movieService->create($request);
 
         if (!empty($movie)) {

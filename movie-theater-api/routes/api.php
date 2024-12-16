@@ -14,6 +14,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\ShowTimeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ViewController;
 use App\Models\Category;
 use App\Models\Movie;
 use App\Models\Role;
@@ -111,6 +112,10 @@ Route::prefix('revenue')->group(function(){
     Route::get('month', [RevenueController::class, 'getMonthRevenue']);
     Route::get('daily', [RevenueController::class, 'getDailyRevenue']);
     Route::get('hours', [RevenueController::class, 'getHoursRevenue']);
+    Route::get('movie', [RevenueController::class, 'getMovieRevenue']);
+    Route::get('cinema',[RevenueController::class, 'getCinemaRevenue']);
+    Route::get('movie/top',[RevenueController::class, 'getTopMovie']);
+    Route::get('new-customer', [RevenueController::class, 'getNewCustomer']);
 });
 // Route::get('revenue-year', [RevenueController::class, 'getYearRevenue']);
 Route::get("bill-detail/{billCode}", [BillDetailController::class, 'getBillDetail']);
@@ -127,7 +132,11 @@ Route::group([
 
 Route::prefix('user')->middleware(['is.login', 'is.admin'])->group(function(){
     Route::resource('/', UserController::class);
-    Route::get("{id}", [UserController::class, 'get'])->where('id','[0-9]+');
+    Route::get("{id}", [UserController::class, 'show'])->where('id','[0-9]+');
     Route::post('is-enabled/{id}', [UserController::class, 'isEnabled'])->where('id','[0-9]+');
     Route::post('{id}', [UserController::class, 'update'])->where('id', '[0-9]+')->withoutMiddleware(\App\Http\Middleware\CheckRoleAdmin::class);
+});
+
+Route::prefix('view')->middleware(['is.login', 'is.admin'])->group(function(){
+    Route::get("admin", [ViewController::class, 'getAdminPage']);
 });

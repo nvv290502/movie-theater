@@ -76,4 +76,19 @@ class CinemaRepository implements CinemaRepositoryInterface
             ->distinct()
             ->get();
     }
+
+    public function revenueCinema($startDate, $endDate)
+    {
+        $query =  Cinema::selectRaw('cinemas.cinema_id as cinemaId, cinemas.cinema_name as cinemaName, SUM(bill_detail.price) as amountMoney, COUNT(bill_detail.bill_id) as numberTicket')
+            ->leftJoin('rooms', 'rooms.cinema_id', '=', 'cinemas.cinema_id')
+            ->leftJoin('schedule_room', 'schedule_room.room_id', '=', 'rooms.room_id')
+            ->leftJoin('bill_detail', 'bill_detail.schedule_room_id', '=', 'schedule_room.schedule_room_id')
+            ->when($startDate && $endDate, function($query) use ($startDate, $endDate){
+                $query->whereBetWeen('bill_detail.created_at', [$startDate, $endDate]);
+            })
+            ->groupBy('cinemas.cinema_id', 'cinemas.cinema_name')
+            ->orderBy('amountMoney','desc')
+            ->get();
+       return $query;
+    }
 }

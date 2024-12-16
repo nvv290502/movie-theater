@@ -41,4 +41,34 @@ class RevenueController extends Controller
 
         return $result;
     }
+
+    public function getMovieRevenue(Request $request)
+    {
+        $startDate = $request['startDate'] ?? null;
+        $endDate = $request['endDate'] ?? null;
+        return $this->revenueService->movieRevenue($startDate, $endDate);
+    }
+
+    public function getCinemaRevenue(Request $request)
+    {
+        $startDate = $request['startDate'] ?? null;
+        $endDate = $request['endDate'] ?? null;
+        return $this->revenueService->cinemaRevenue($startDate, $endDate);
+    }
+    
+    public function getTopMovie()
+    {
+        return $this->revenueService->getTopMovie();
+    }
+
+    public function getNewCustomer()
+    {
+        $customer = $this->revenueService->getNewCustomer();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Danh sách khach hang moi',
+            'data' => $customer,
+        ]);
+    }
 }
