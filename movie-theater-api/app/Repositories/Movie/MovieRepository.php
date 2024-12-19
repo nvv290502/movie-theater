@@ -68,7 +68,7 @@ class MovieRepository implements MovieRepositoryInterface
             $data['banner_url'] = $request['banner'];
         }
 
-        return Movie::updateOrCreate(
+        return Movie::updated(
             ['movie_id' => $id],
             $data
         );

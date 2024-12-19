@@ -22,7 +22,7 @@ class Room extends Model
 
     public function seats()
     {
-        return $this->belongsToMany(Seat::class)->using(RoomSeat::class);
+        return $this->belongsToMany(Seat::class,'room_seat')->withPivot('type_seat');
     }
 
     public function scheduleRoom(){

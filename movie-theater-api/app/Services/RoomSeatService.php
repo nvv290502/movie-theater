@@ -23,8 +23,7 @@ class RoomSeatService
     {
         $roomSeats = [];
         foreach ($request->all() as $value) {
-            $seat = $this->seatRepositoryInterface->findByRowNameAndColumnName($value['row_name'], $value['column_name']);
-
+            $seat = $this->seatRepositoryInterface->getSeatByRowAndColumn($value['row_name'], $value['column_name']);
             if (!$seat) {
                 return response()->json(['message' => 'Ghế không tồn tại: ' . $value['row_name'] . $value['column_name']], 404);
             }
@@ -33,6 +32,8 @@ class RoomSeatService
                 'seat_id' => $seat->seat_id,
                 'room_id' => $roomId,
                 'type_seat' => $value['type_seat'],
+                'created_at' => date('y-m-d H:i:s'),
+                'updated_at' => date('y-m-d H:i:s')
             ];
             $roomSeats[] = $roomSeat;
         }

@@ -47,8 +47,15 @@ class BillDetailRepository
     //     ->when()
     // }
 
-    public function getBillDetailByRoomBySeatBySchedule($roomId, $seatId, $scheduleId)
+    public function getBillDetailByRoomBySeatBySchedule($scheduleRoomId, $seatId)
     {
-        return BillDetail::where('room_id', $roomId)->where('seat_id', $seatId)->where('schedule_id', $scheduleId)->exists();
+        return BillDetail::where('schedule_room_id', $scheduleRoomId)
+        ->where('seat_id', $seatId)
+        ->first();
+    }
+
+    public function findBillDetailByBillId($billId)
+    {
+        return BillDetail::where('bill_id', $billId)->get();
     }
 }

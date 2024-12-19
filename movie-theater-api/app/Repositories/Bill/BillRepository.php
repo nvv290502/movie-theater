@@ -51,8 +51,12 @@ class BillRepository
             ->join('bill_detail', 'bill_detail.bill_id', 'bills.bill_id')
             ->whereRaw("YEAR(bill_detail.created_at) = $year AND MONTH(bill_detail.created_at) = $month AND DAY(bill_detail.created_at) = $day")
             ->groupByRaw('HOUR(bill_detail.created_at)')
-            ->orderByRaw('HOUR(bill_detail.created_at) ASC')
-            ->get();
-        return $result;
+            ->orderByRaw('HOUR(bill_detail.created_at) ASC');
+        dd($result->toSql());
+    }
+
+    public function finBillByBillCode($billCode)
+    {
+        return Bill::where($billCode)->first();
     }
 }

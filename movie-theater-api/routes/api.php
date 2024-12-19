@@ -12,6 +12,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SeatController;
+use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\ShowTimeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewController;
@@ -64,6 +65,7 @@ Route::prefix('room')->group(function () {
 
 Route::prefix('movie')->group(function () {
     Route::resource("/", MovieController::class);
+    Route::delete("{id}", [MovieController::class, 'destroy']);
     Route::put("{id}", [MovieController::class, 'update'])->where('id','[0-9]+');
     Route::get("{id}", [MovieController::class, 'show'])->where('id', '[0-9]+');
     Route::get("upcoming", [MovieController::class, 'getUpcomingMovie']);
@@ -105,6 +107,7 @@ Route::prefix('review')->group(function(){
 
 Route::prefix('bill')->group(function(){
     Route::post("", [BillController::class, 'saveBill']);
+    Route::delete("",[BillController::class, 'deleteBill']);
 });
 
 Route::prefix('revenue')->group(function(){
@@ -134,9 +137,13 @@ Route::prefix('user')->middleware(['is.login', 'is.admin'])->group(function(){
     Route::resource('/', UserController::class);
     Route::get("{id}", [UserController::class, 'show'])->where('id','[0-9]+');
     Route::post('is-enabled/{id}', [UserController::class, 'isEnabled'])->where('id','[0-9]+');
-    Route::post('{id}', [UserController::class, 'update'])->where('id', '[0-9]+')->withoutMiddleware(\App\Http\Middleware\CheckRoleAdmin::class);
+    Route::put('{id}', [UserController::class, 'update'])->where('id', '[0-9]+')->withoutMiddleware(\App\Http\Middleware\CheckRoleAdmin::class);
 });
 
 Route::prefix('view')->middleware(['is.login', 'is.admin'])->group(function(){
     Route::get("admin", [ViewController::class, 'getAdminPage']);
+});
+
+Route::prefix('mail')->group(function(){
+    Route::get("send", [SendMailController::class, 'sendEmail']);
 });

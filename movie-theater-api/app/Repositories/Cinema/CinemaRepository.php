@@ -72,7 +72,7 @@ class CinemaRepository implements CinemaRepositoryInterface
             ->when($showDate, function ($query, $showDate) {
                 $query->where('sch.schedule_date', $showDate);
             })
-            ->select('c.*', 'sch.schedule_date', 'sch.schedule_time')
+            ->select('c.*')
             ->distinct()
             ->get();
     }

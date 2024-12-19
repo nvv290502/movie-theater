@@ -11,6 +11,6 @@ class InvalidInputException extends Exception
         return response()->json([
             'status' => 400,
             'message' => $this->getMessage(),
-        ], status: 400);
+        ], 400);
     }
 }

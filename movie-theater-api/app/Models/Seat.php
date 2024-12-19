@@ -12,7 +12,7 @@ class Seat extends Model
 
     public function rooms()
     {
-        return $this->belongsToMany(Room::class)->using(RoomSeat::class);
+        return $this->belongsToMany(Room::class, 'room_seat')->withPivot('type_seat');
     }
 
     public function billDetail()

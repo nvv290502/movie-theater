@@ -84,10 +84,9 @@ class MovieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         $movie = $this->movieService->isEnabled($id);
-
         return response()->json([
             'status' => 200,
             'message' => 'Cap nhat trang thai phim co id la ' . $id . ' thanh cong',

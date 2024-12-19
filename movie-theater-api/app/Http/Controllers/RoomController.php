@@ -119,7 +119,7 @@ class RoomController extends Controller
     public function saveLayout($roomId, Request $request)
     {
         $roomSeat = $this->roomSeatService->saveLayout($roomId, $request);
-
+        
         if($roomSeat){
             return response()->json([
                 'status' => 200,
