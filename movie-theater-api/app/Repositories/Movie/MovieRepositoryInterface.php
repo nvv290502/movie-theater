@@ -11,7 +11,7 @@ interface MovieRepositoryInterface
     public function getAllIsEnabled($size, $isEnabled);
     public function getById($id);
     public function create(array $request);
-    public function update(array $request, $id);
+    public function update(array $request, $movie);
     public function isEnabled(Movie $movie);
     public function existsMovie($movieName, $id);
     public function getUpcomingMovie();

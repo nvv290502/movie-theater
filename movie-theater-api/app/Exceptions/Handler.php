@@ -29,14 +29,14 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $exception){
-        if($exception instanceof MethodNotAllowedHttpException)
-        {
-            return response()->json([
-                'success' => 0,
-                'message' => 'this method is not allowed for the request route',
-                'status' => '405',
-            ], 405);
-        }
-    }
+    // public function render($request, Throwable $exception){
+    //     if($exception instanceof MethodNotAllowedHttpException)
+    //     {
+    //         return response()->json([
+    //             'success' => 0,
+    //             'message' => 'this method is not allowed for the request route',
+    //             'status' => '405',
+    //         ], 405);
+    //     }
+    // }
 }

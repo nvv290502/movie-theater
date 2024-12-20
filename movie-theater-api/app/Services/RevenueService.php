@@ -9,6 +9,8 @@ use App\Repositories\User\UserRepository;
 use Carbon\Carbon;
 use GuzzleHttp\Psr7\Request;
 
+use function PHPSTORM_META\map;
+
 class RevenueService
 {
     protected $billRepository;
@@ -46,12 +48,13 @@ class RevenueService
 
         $result = $this->billRepository->getMonthRevenue($year)->toArray();
 
-        foreach ($monthRevenue as &$item1) {
-            foreach ($result as $item2) {
-                if ($item1['month'] === $item2['month']) {
-                    $item1['revenues'] = $item2['revenues'];
-                }
-            }
+        foreach ($result as $item)
+        {
+            $monthRevenue[$item['month'] - 1] = [
+                'month' => $item['month'],
+                'revenues' => $item['revenues']
+            ];
+
         }
 
         return $monthRevenue;
@@ -70,12 +73,12 @@ class RevenueService
 
         $result = $this->billRepository->getDailyRevenue($year, $month)->toArray();
 
-        foreach ($dayRevenue as &$item1) {
-            foreach ($result as $item2) {
-                if ($item1['days'] === $item2['days']) {
-                    $item1['revenues'] = $item2['revenues'];
-                }
-            }
+        foreach ($result as $item)
+        {
+            $dayRevenue[$item['days'] - 1] = [
+                'days' => $item['days'],
+                'revenues' => $item['revenues']
+            ];
         }
         return $dayRevenue;
     }
@@ -93,12 +96,12 @@ class RevenueService
 
         $result = $this->billRepository->getHoursRevenue($year, $month, $day)->toArray();
 
-        foreach ($hourseRevenue as &$item1) {
-            foreach ($result as $item2) {
-                if ($item1['hours'] === $item2['hours']) {
-                    $item1['revenues'] = $item2['revenues'];
-                }
-            }
+        foreach ($result as $item)
+        {
+            $hourseRevenue[$item['hours'] - 1] = [
+                'hours' => $item['hours'],
+                'revenues' => $item['revenues']
+            ];
         }
         return $hourseRevenue;
     }

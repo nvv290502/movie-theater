@@ -87,11 +87,11 @@ class MovieService
             $imagePathPoster = $this->imageService->imageUpload($movieRequest->file('poster'));
             $imagePathBanner = $this->imageService->imageUpload($movieRequest->file('banner'));
 
-            $request = $movieRequest->validated();
+            $request = $movieRequest->all();
             $request['poster'] = $imagePathPoster;
             $request['banner'] = $imagePathBanner;
 
-            $movie = $this->movieRepositoryInterface->update($request, $id);
+            $movie = $this->movieRepositoryInterface->update($request, $movie);
 
             $movie->categories()->sync($movieRequest->categoryIds);
         });

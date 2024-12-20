@@ -36,13 +36,13 @@ class AuthController extends Controller
         return response()->json([
             'status' => '200',
             'message' => 'thong tin nguoi dung',
-            'data' => auth()->user()->load('roles'),
+            'data' => auth('api')->user()->load('roles'),
         ]);
     }
 
     public function logout()
     {
-        auth()->user();
+        auth('api')->user();
         return response()->json(
             ['status' => 200, 'message' => 'Logout thanh cong']
         );

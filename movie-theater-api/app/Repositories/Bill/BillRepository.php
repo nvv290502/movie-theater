@@ -27,7 +27,7 @@ class BillRepository
     {
         $result = Bill::selectRaw('MONTH(bill_detail.created_at) as month, SUM(bill_detail.price) as revenues')
             ->join('bill_detail', 'bill_detail.bill_id', 'bills.bill_id')
-            ->whereRaw("YEAR(bill_detail.created_at) = $year")
+            ->whereYear("bill_detail.created_at", $year)
             ->groupByRaw('MONTH(bill_detail.created_at)')
             ->orderByRaw('MONTH(bill_detail.created_at) ASC')
             ->get();
@@ -38,7 +38,8 @@ class BillRepository
     {
         $result = Bill::selectRaw('DAY(bill_detail.created_at) as days, SUM(bill_detail.price) as revenues')
             ->join('bill_detail', 'bill_detail.bill_id', 'bills.bill_id')
-            ->whereRaw("YEAR(bill_detail.created_at) = $year AND MONTH(bill_detail.created_at) = $month")
+            ->whereYear("bill_detail.created_at", $year)
+            ->whereMonth("bill_detail.created_at", $month)
             ->groupByRaw('DAY(bill_detail.created_at)')
             ->orderByRaw('DAY(bill_detail.created_at) ASC')
             ->get();
@@ -49,10 +50,12 @@ class BillRepository
     {
         $result = Bill::selectRaw('HOUR(bill_detail.created_at) as hours, SUM(bill_detail.price) as revenues')
             ->join('bill_detail', 'bill_detail.bill_id', 'bills.bill_id')
-            ->whereRaw("YEAR(bill_detail.created_at) = $year AND MONTH(bill_detail.created_at) = $month AND DAY(bill_detail.created_at) = $day")
+            ->whereYear("bill_detail.created_at", $year)
+            ->whereMonth("bill_detail.created_at", $month)
+            ->whereDay("bill_detail.created_at", $day)
             ->groupByRaw('HOUR(bill_detail.created_at)')
             ->orderByRaw('HOUR(bill_detail.created_at) ASC');
-        dd($result->toSql());
+        return $result;
     }
 
     public function finBillByBillCode($billCode)

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Movie;
 
+use App\Http\Requests\MovieRequest;
 use App\Models\Movie;
 use Illuminate\Support\Facades\DB;
 
@@ -47,16 +48,16 @@ class MovieRepository implements MovieRepositoryInterface
             ->exists();
     }
 
-    public function update(array $request, $id)
+    public function update(array $request, $movie)
     {
         $data = [
             'movie_name' => $request['name'],
             'duration' => $request['duration'],
+            'trailer' => $request['trailer'],
+            'summary' => $request['summary'],
             'release_date' => $request['releaseDate'],
             'author' => $request['author'],
             'actor' => $request['actor'],
-            'trailer' => $request['trailer'],
-            'summary' => $request['summary'],
             'language' => $request['language']
         ];
 
@@ -68,10 +69,9 @@ class MovieRepository implements MovieRepositoryInterface
             $data['banner_url'] = $request['banner'];
         }
 
-        return Movie::updated(
-            ['movie_id' => $id],
-            $data
-        );
+        $movie->update($data);
+
+        return $movie;
     }
 
     public function isEnabled(Movie $movie)

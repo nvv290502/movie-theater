@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\RevenueService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RevenueController extends Controller
@@ -45,6 +46,7 @@ class RevenueController extends Controller
     public function getMovieRevenue(Request $request)
     {
         $startDate = $request['startDate'] ?? null;
+
         $endDate = $request['endDate'] ?? null;
         return $this->revenueService->movieRevenue($startDate, $endDate);
     }

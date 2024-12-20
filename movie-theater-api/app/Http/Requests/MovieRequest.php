@@ -30,6 +30,8 @@ class MovieRequest extends FormRequest
             'trailer' => 'required',
             'summary' => 'required',
             'language' => 'required',
+            'poster' => 'nullable|file|mimes:jpeg,png,jpg|max:2048',
+            'banner' => 'nullable|file|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 
@@ -48,6 +50,12 @@ class MovieRequest extends FormRequest
             'trailer.required' => 'Trailer là bắt buộc.',
             'summary.required' => 'Tóm tắt nội dung là bắt buộc.',
             'language.required' => 'Language nội dung là bắt buộc.',
+            'poster.file' => 'Poster phai la dang file.',
+            'banner.file' => 'Banner phai la dang file.',
+            'poster.mimes'=> 'Poster phai co duoi jpeg,png,jpg.',
+            'banner.mimes' => 'Banner phai co duoi la jpeg,png,jpg.',
+            'poster.max' => 'Poster khong duoc vuot qua 2mb.',
+            'banner.max' => 'Banner khong duoc vuot qua 2mb.'
         ];
     }
 }
