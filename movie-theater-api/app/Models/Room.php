@@ -29,5 +29,4 @@ class Room extends Model
         return $this->hasMany(ScheduleRoom::class, 'room_id');
     }
 
-
 }

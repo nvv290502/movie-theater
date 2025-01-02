@@ -3,7 +3,9 @@
 namespace App\Repositories\Movie;
 
 use App\Http\Requests\MovieRequest;
+use App\Models\Category;
 use App\Models\Movie;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
 
 class MovieRepository implements MovieRepositoryInterface
@@ -90,12 +92,19 @@ class MovieRepository implements MovieRepositoryInterface
 
     public function movieShowByDate($date)
     {
-        return DB::table('schedules as sch')
-            ->join('movies as m', 'sch.movie_id', '=', 'm.movie_id')
-            ->join('schedule_room as s', 'sch.schedule_id', '=', 's.schedule_id')
-            ->where('sch.schedule_date', $date)
-            ->where('m.is_enabled', true)
-            ->select('m.*',)
+        // return DB::table('schedules as sch')
+        //     ->join('movies as m', 'sch.movie_id', '=', 'm.movie_id')
+        //     ->join('schedule_room as s', 'sch.schedule_id', '=', 's.schedule_id')
+        //     ->where('sch.schedule_date', $date)
+        //     ->where('m.is_enabled', true)
+        //     ->select('m.*',)
+        //     ->distinct()
+        //     ->get();
+
+        return Movie::where('is_enabled', true)
+            ->whereHas('schedules.scheduleRoom', function ($query) use ($date) {
+                $query->where('schedule_date', $date);
+            })
             ->distinct()
             ->get();
     }
@@ -120,8 +129,14 @@ class MovieRepository implements MovieRepositoryInterface
 
     public function getListName()
     {
-        return DB::table('movies as m')
-            ->pluck('m.movie_name');
+        return Movie::query()
+            ->pluck('movie_name');
+    }
+
+    public function getMovieNameAndIds()
+    {
+        return Movie::select('movie_id as movieId', 'movie_name as movieName')
+            ->get();
     }
 
     public function getByName($movieName)
@@ -141,7 +156,7 @@ class MovieRepository implements MovieRepositoryInterface
             ->leftJoin('schedules', 'movies.movie_id', '=', 'schedules.movie_id')
             ->leftJoin('schedule_room', 'schedule_room.schedule_id', '=', 'schedules.schedule_id')
             ->leftJoin('bill_detail', 'bill_detail.schedule_room_id', '=', 'schedule_room.schedule_room_id')
-            ->when($startDate && $endDate, function($query) use ($startDate, $endDate){
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
                 $query->whereBetWeen('bill_detail.created_at', [$startDate, $endDate]);
             })
             ->groupBy('movies.movie_id', 'movies.movie_name')
@@ -153,24 +168,23 @@ class MovieRepository implements MovieRepositoryInterface
 
     public function getTop10movieByNumberTicket()
     {
-
         $result = Movie::selectRaw('movies.movie_id as movieId, COUNT(bill_detail.seat_id) as numberTicket')
-                ->join('schedules','schedules.movie_id','=','movies.movie_id')
-                ->join('schedule_room','schedule_room.schedule_id','=', 'schedules.schedule_id')
-                ->leftJoin('bill_detail','bill_detail.schedule_room_id','=', 'schedule_room.schedule_room_id')
-                ->groupBy('movieId')
-                ->orderByDesc('numberTicket')
-                ->get();
+            ->join('schedules', 'schedules.movie_id', '=', 'movies.movie_id')
+            ->join('schedule_room', 'schedule_room.schedule_id', '=', 'schedules.schedule_id')
+            ->leftJoin('bill_detail', 'bill_detail.schedule_room_id', '=', 'schedule_room.schedule_room_id')
+            ->groupBy('movieId')
+            ->orderByDesc('numberTicket')
+            ->get();
         return $result;
     }
 
     public function getTop10movieByRating()
     {
         $result = Movie::selectRaw('movies.movie_id as movieId, COALESCE(ROUND(AVG(CAST(reviews.number_star AS FLOAT)),2), 0.0) as rating')
-                ->leftJoin('reviews','reviews.movie_id','=','movies.movie_id')
-                ->groupBy('movies.movie_id')
-                ->orderByDesc('rating')
-                ->get();
+            ->leftJoin('reviews', 'reviews.movie_id', '=', 'movies.movie_id')
+            ->groupBy('movies.movie_id')
+            ->orderByDesc('rating')
+            ->get();
 
         return $result;
     }

@@ -30,7 +30,7 @@ class BillRepository
             ->whereYear("bill_detail.created_at", $year)
             ->groupByRaw('MONTH(bill_detail.created_at)')
             ->orderByRaw('MONTH(bill_detail.created_at) ASC')
-            ->get();
+            ->pluck('revenues', 'month');
         return $result;
     }
 
@@ -42,7 +42,7 @@ class BillRepository
             ->whereMonth("bill_detail.created_at", $month)
             ->groupByRaw('DAY(bill_detail.created_at)')
             ->orderByRaw('DAY(bill_detail.created_at) ASC')
-            ->get();
+            ->pluck('revenues', 'days');
         return $result;
     }
 
@@ -54,7 +54,7 @@ class BillRepository
             ->whereMonth("bill_detail.created_at", $month)
             ->whereDay("bill_detail.created_at", $day)
             ->groupByRaw('HOUR(bill_detail.created_at)')
-            ->orderByRaw('HOUR(bill_detail.created_at) ASC');
+            ->orderByRaw('HOUR(bill_detail.created_at) ASC')->pluck('revenues', 'hours');
         return $result;
     }
 

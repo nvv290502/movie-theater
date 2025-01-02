@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReviewRequest extends FormRequest
+class BillRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,12 @@ class ReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'numberStar' => 'required|max:5',
+            'billCode' => 'required',
+            'userId' => 'required|exists:users,user_id',
             'movieId' => 'required|exists:movies,movie_id',
-            'userId' => 'required|exists:users,user_id'
+            'roomId' => 'required|exists:rooms,room_id',
+            'showDate' => 'required|date_format:Y-m-d|after:today',
+            'showTime' => 'required|date_format:H:i:s',
         ];
     }
 
@@ -32,17 +35,20 @@ class ReviewRequest extends FormRequest
     {
         return [
             'required' => ':attribute la bat buoc',
-            'max' => ':attribute sao khong hop le',
-            'exists' => ':attributes khong ton tai'
+            'exists' => ':attribute khong ton tai',
+            'date_format' => ':attribute khong dung dinh dang'
         ];
     }
 
     public function attributes()
     {
         return [
-            'numerStar' => 'So sao',
+            'billCode' => 'Ma hoa don',
+            'userId' => 'Nguoi dung',
             'movieId' => 'Phim',
-            'userId' => 'Mguoi dung'
+            'roomId' => 'Phong',
+            'showDate' => 'Ngay chieu',
+            'showTime' => 'Gio chieu'
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BillRequest;
 use App\Models\Bill;
 use App\Services\BillService;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class BillController extends Controller
     {
         $this->billService = $billService;
     }
-    public function saveBill(Request $request)
+    public function saveBill(BillRequest $request)
     {
         $bill = $this->billService->saveBill($request['billCode'], $request['userId'], $request['movieId'], $request['roomId'], $request['showDate'], $request['showTime'], $request['seats'], $request['price']);
 

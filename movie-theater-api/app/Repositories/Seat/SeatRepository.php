@@ -26,9 +26,8 @@ class SeatRepository implements SeatRepositoryInterface
 
     public function getSeatByRoom($roomId)
     {
-        return DB::table('seats as s')
-            ->join('room_seat as rs', 'rs.seat_id', 's.seat_id')
-            ->where('rs.room_id', $roomId)
+        return Seat::join('room_seat', 'room_seat.seat_id', '=', 'seats.seat_id')
+            ->where('room_seat.room_id', $roomId)
             ->get();
     }
 

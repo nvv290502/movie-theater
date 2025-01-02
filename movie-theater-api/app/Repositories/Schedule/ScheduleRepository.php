@@ -11,24 +11,42 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 {
     public function getScheduleByCinema($movieId, $city = null, $showDate = null, $cinemaId = null)
     {
-        return DB::table('schedules as sch')
-            ->join('schedule_room as sr', 'sr.schedule_id', 'sch.schedule_id')
-            ->join('rooms as r', 'r.room_id', 'sr.room_id')
-            ->join('cinemas as c', 'c.cinema_id', 'r.cinema_id')
-            ->where('sch.movie_id', $movieId)
-            ->where('sch.schedule_date', '>=', DB::raw('DATE(NOW())'))
-            ->where('sch.schedule_time', '>=', DB::raw('TIME(NOW())'))
+        // return Schedule::join('schedule_room as sr', 'sr.schedule_id', 'schedules.schedule_id')
+        //     ->join('rooms as r', 'r.room_id', 'sr.room_id')
+        //     ->join('cinemas as c', 'c.cinema_id', 'r.cinema_id')
+        //     ->where('schedules.movie_id', $movieId)
+        //     ->where('schedules.schedule_date', '>=', DB::raw('DATE(NOW())'))
+        //     ->where('schedules.schedule_time', '>=', DB::raw('TIME(NOW())'))
+        //     ->when($city, function ($query, $city) {
+        //         $query->where('c.address', 'like', '%' . $city . '%');
+        //     })
+        //     ->when($showDate, function ($query, $showDate) {
+        //         $query->where('schedules.schedule_date', $showDate);
+        //     })
+        //     ->when($cinemaId, function ($query, $cinemaId) {
+        //         $query->where('c.cinema_id', $cinemaId);
+        //     })
+        //     ->orderBy('schedules.schedule_time', 'ASC')
+        //     ->distinct()
+        //     ->get();
+
+        return Schedule::where('movie_id', $movieId)
+            ->whereDate('schedule_date', '>=', now())
+            ->whereTime('schedule_time', '>=', now())
             ->when($city, function ($query, $city) {
-                $query->where('c.address', 'like', '%' . $city . '%');
+                $query->whereHas('scheduleRoom.rooms.cinemas', function ($q) use ($city) {
+                    $q->where('address', 'like', '%' . $city . '%');
+                });
             })
             ->when($showDate, function ($query, $showDate) {
-                $query->where('sch.schedule_date', $showDate);
+                $query->where('schedule_date', $showDate);
             })
             ->when($cinemaId, function ($query, $cinemaId) {
-                $query->where('c.cinema_id', $cinemaId);
+                $query->whereHas('scheduleRoom.rooms.cinemas', function ($q) use ($cinemaId) {
+                    $q->where('cinema_id', $cinemaId);
+                });
             })
-            ->select('sch.*')
-            ->orderBy('sch.schedule_time', 'ASC')
+            ->orderBy('schedule_time')
             ->distinct()
             ->get();
     }
@@ -49,6 +67,12 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             ->where('sr.room_id', $roomId)
             ->select('sch.schedule_id', 'm.movie_id', 'm.movie_name', 'm.poster_url', 'sch.schedule_date', 'sch.schedule_time', 'm.duration')
             ->get();
+
+        // return Schedule::with(['movies:movie_id,movie_name,poster_url,duration'])
+        //     ->whereHas('scheduleRoom.rooms', function($q) use ($roomId){
+        //         $q->where('room_id', $roomId);
+        //     })
+        //     ->get();
     }
 
     public function countTicketBySchedule($scheduleId)
@@ -61,12 +85,19 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
     public function getScheduleByRoom($roomId)
     {
-        return DB::table('schedules as sch')
-            ->join('movies as m', 'm.movie_id', 'sch.movie_id')
-            ->join('schedule_room as sr', 'sr.schedule_id', 'sch.schedule_id')
-            ->where('sr.room_id', $roomId)
-            ->select('sch.schedule_id', 'm.movie_id', 'm.poster_url', 'sch.schedule_date', 'sch.schedule_time', 'm.duration', 'm.movie_name')
-            ->get();
+        // return DB::table('schedules as sch')
+        //     ->join('movies as m', 'm.movie_id', 'sch.movie_id')
+        //     ->join('schedule_room as sr', 'sr.schedule_id', 'sch.schedule_id')
+        //     ->where('sr.room_id', $roomId)
+        //     ->select('sch.schedule_id', 'm.movie_id', 'm.poster_url', 'sch.schedule_date', 'sch.schedule_time', 'm.duration', 'm.movie_name')
+        //     ->get();
+
+        $result =  Schedule::with(['movies:movie_id,movie_name,poster_url,duration'])
+            ->whereHas('scheduleRoom', function ($q) use ($roomId) {
+                $q->where('room_id', $roomId);
+            })->get();
+
+        return $result;
     }
 
     public function saveOrUpdate(Request $request)
@@ -113,6 +144,16 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             ->paginate($size);
 
         return $result;
+
+        // return Schedule::with([
+        //     'movies:movie_id,duration,movie_name',
+        //     // 'scheduleRoom:schedule_room_id,price',
+        //     'scheduleRoom.rooms:room_id,room_name',
+        //     'scheduleRoom.rooms.cinemas:cinema_id,cinema_name'
+        // ])
+        //     ->orderByDesc('schedule_date')
+        //     ->orderByDesc('schedule_time')
+        //     ->paginate($size);
     }
 
     public function getScheduleByMovieAndShowDateAndShowTime($movieId, $showDate, $showTime)

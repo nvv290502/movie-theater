@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:export-revenue')->everyMinute();
+        $schedule->command('app:export-revenue')->dailyAt('10:00');
     }
 
     /**

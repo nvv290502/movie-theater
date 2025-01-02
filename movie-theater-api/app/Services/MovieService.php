@@ -26,10 +26,6 @@ class MovieService
 
     public function getAll($size, $isEnabled)
     {
-        if (!is_numeric($size) || $size < 0) {
-            throw new InvalidNumbericException("size phải là một số nguyên lớn hơn 0");
-        }
-
         if (empty($isEnabled)) {
             return $this->movieRepositoryInterface->getAll($size);
         }
@@ -125,9 +121,6 @@ class MovieService
 
     public function movieShowByDate($date)
     {
-        if (!$this->isValidDate($date, 'Y-m-d')) {
-            throw new DateTimeFormatException('Ngay nhap vao khong hop le');
-        }
         return $this->movieRepositoryInterface->movieShowByDate($date);
     }
 

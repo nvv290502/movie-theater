@@ -40,8 +40,7 @@ class CategoryRequest extends FormRequest
     public function failedValidation(ValidationValidator $validator)
     {
         $errors = $validator->errors()->toArray();
-
-        // Ném HttpResponseException để trả về lỗi dưới dạng JSON
+        
         throw new HttpResponseException(
             response()->json([
                 'status' => 422,

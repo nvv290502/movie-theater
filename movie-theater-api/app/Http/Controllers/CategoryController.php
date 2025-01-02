@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\FetchRequest;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
@@ -18,14 +19,12 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(FetchRequest $request)
     {
-        $size = request()->input("size", 5);
-        $isEnabled = request()->get('isEnabled');
         return response()->json([
             'status' => 200,
             'message' => 'Danh sách thể loại',
-            'data' => $this->categoryService->getAll($size, $isEnabled)
+            'data' => $this->categoryService->getAll($request['size'], $request['isEnabled'])
         ]);
     }
 

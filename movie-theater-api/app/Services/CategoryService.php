@@ -21,10 +21,6 @@ class CategoryService
 
     public function getAll($size, $isEnabled)
     {
-        if (!is_numeric($size) || $size < 0) {
-            throw new InvalidNumbericException("size phải là một số nguyên lớn hơn 0");
-        }
-
         if (empty($isEnabled)) {
             return $this->categoryRepositoryInterface->getAll($size);
         }

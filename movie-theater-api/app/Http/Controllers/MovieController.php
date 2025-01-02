@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FetchRequest;
 use App\Http\Requests\MovieRequest;
 use App\Http\Resources\MovieCollection;
 use App\Http\Resources\MovieResource;
@@ -19,12 +20,9 @@ class MovieController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(FetchRequest $request)
     {
-        $size = request()->input("size", 5);
-        $isEnabled = request()->get('isEnabled');
-
-        $movie = $this->movieService->getAll($size, $isEnabled);
+        $movie = $this->movieService->getAll($request['size'], $request['isEnabled']);
 
         // return apiResponse(new MovieCollection($movie), 'Lay danh sach phim thanh cong', 200);
 
@@ -107,7 +105,8 @@ class MovieController extends Controller
 
     public function movieShowToday()
     {
-        $movie = $this->movieService->movieShowByDate(date('Y-m-d'));
+        $now = date('Y-m-d');
+        $movie = $this->movieService->movieShowByDate($now);
 
         return response()->json([
             'status' => 200,

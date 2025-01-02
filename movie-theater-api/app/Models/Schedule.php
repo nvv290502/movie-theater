@@ -13,7 +13,7 @@ class Schedule extends Model
 
     public function movies()
     {
-        return $this->belongsTo(Movie::class, 'schedule_id');
+        return $this->belongsTo(Movie::class, 'movie_id');
     }
 
     public function rooms()

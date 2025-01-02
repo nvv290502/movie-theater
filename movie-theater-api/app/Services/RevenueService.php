@@ -38,25 +38,21 @@ class RevenueService
     public function getMonthRevenue($year)
     {
         $monthRevenue = [];
-
-        for($i = 1; $i < 13; $i++){
-            array_push($monthRevenue, [
-                'month' => $i,
-                'revenues' => 0
-            ]);
-        }
-
         $result = $this->billRepository->getMonthRevenue($year)->toArray();
 
-        foreach ($result as $item)
-        {
-            $monthRevenue[$item['month'] - 1] = [
-                'month' => $item['month'],
-                'revenues' => $item['revenues']
-            ];
-
+        for($i = 1; $i < 13; $i++){
+            if(array_key_exists($i, $result)){
+                $monthRevenue[$i-1] = [
+                    'month' => $i,
+                    'revenues' => $result[$i]
+                ];
+            }else{
+                $monthRevenue[$i-1] = [
+                    'month' => $i,
+                    'revenues' => 0
+                ];
+            }
         }
-
         return $monthRevenue;
     }
 
@@ -64,58 +60,79 @@ class RevenueService
     {
         $dayInMonth = Carbon::createFromDate($year, $month)->daysInMonth;
         $dayRevenue = [];
-        for ($i = 1; $i <= $dayInMonth; $i++) {
-            array_push($dayRevenue, [
-                "days" => $i,
-                "revenues" => 0
-            ]);
-        }
-
         $result = $this->billRepository->getDailyRevenue($year, $month)->toArray();
-
-        foreach ($result as $item)
-        {
-            $dayRevenue[$item['days'] - 1] = [
-                'days' => $item['days'],
-                'revenues' => $item['revenues']
-            ];
+        for ($i = 1; $i <= $dayInMonth; $i++) {
+            if(array_key_exists($i, $result)){
+                $dayRevenue[$i-1] = [
+                    'days' => $i,
+                    'revenues' => $result[$i]
+                ];
+            }else{
+                $dayRevenue[$i-1] = [
+                    'days' => $i,
+                    'revenues' => 0
+                ];
+            }
         }
+
         return $dayRevenue;
     }
 
     public function getHourRevenue($year, $month, $day)
     {
         $hourseRevenue = [];
-
-        for ($i = 1; $i <= 24; $i++) {
-            array_push($hourseRevenue, [
-                'hours' => $i,
-                'revenues' => 0
-            ]);
-        }
-
+      
         $result = $this->billRepository->getHoursRevenue($year, $month, $day)->toArray();
 
-        foreach ($result as $item)
-        {
-            $hourseRevenue[$item['hours'] - 1] = [
-                'hours' => $item['hours'],
-                'revenues' => $item['revenues']
-            ];
+        for ($i = 1; $i <= 24; $i++) {
+
+            if(array_key_exists($i, $result)){
+                $hourseRevenue[$i-1] = [
+                    'hours' => $i,
+                    'revenues' => $result[$i]
+                ];
+            }else {
+                $hourseRevenue[$i-1] = [
+                    'hours' => $i,
+                    'revenues' => 0
+                ];
+            }
         }
+
         return $hourseRevenue;
     }
 
     public function movieRevenue($startDate, $endDate)
     {
-        $result = $this->movieRepository->movieRevenue($startDate, $endDate);
+        $revenueMovie = [];
 
-        foreach ($result as $item) {
-            if ($item['amountMoney'] == null) {
-                $item['amountMoney'] = 0;
+        $movies = $this->movieRepository->getMovieNameAndIds()->toArray();
+        $result = $this->movieRepository->movieRevenue($startDate, $endDate);
+        $result = $result->keyBy('movieId')->toArray();
+
+        for($i = 1; $i <= count($movies); $i++){
+            if(array_key_exists($i, $result)){
+                $revenueMovie[$i-1] = [
+                    'movieId' => $result[$i]['movieId'],
+                    'movieName' => $result[$i]['movieName'],
+                    'amountMoney' => ($result[$i]['amountMoney'] != null) ? $result[$i]['amountMoney'] : 0,
+                    'numberTicket' => $result[$i]['numberTicket']
+                ];
+            }else{
+                $revenueMovie[$i-1] = [
+                    'movieId' => $movies[$i-1]->movieId,
+                    'movieName' => $movies[$i-1]->movieName,
+                    'amountMoney' => 0,
+                    'numberTicket' => 0
+                ];
             }
         }
-        return $result;
+
+        usort($revenueMovie, function ($a, $b) {
+            return $b['amountMoney'] <=> $a['amountMoney'];
+        });
+
+        return collect($revenueMovie);
     }
 
     public function cinemaRevenue($startDate, $endDate)

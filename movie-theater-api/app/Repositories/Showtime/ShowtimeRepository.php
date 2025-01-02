@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Showtime;
 
+use App\Models\Schedule;
 use App\Models\ScheduleRoom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

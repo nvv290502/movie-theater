@@ -38,24 +38,29 @@ class MovieRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Tên phim là bắt buộc.',
-            'name.max' => 'Tên phim không được vượt quá 255 ký tự.',
-            'duration.required' => 'Thời lượng là bắt buộc.',
-            'duration.numeric' => 'Thời lượng phải là một số.',
-            'duration.min' => 'Thời lượng phải lớn hơn hoặc bằng 1.',
-            'releaseDate.required' => 'Ngày phát hành là bắt buộc.',
-            'releaseDate.date' => 'Ngày phát hành phải là định dạng ngày hợp lệ.',
-            'author.required' => 'Tác giả là bắt buộc.',
-            'actor.required' => 'Diễn viên là bắt buộc.',
-            'trailer.required' => 'Trailer là bắt buộc.',
-            'summary.required' => 'Tóm tắt nội dung là bắt buộc.',
-            'language.required' => 'Language nội dung là bắt buộc.',
-            'poster.file' => 'Poster phai la dang file.',
-            'banner.file' => 'Banner phai la dang file.',
-            'poster.mimes'=> 'Poster phai co duoi jpeg,png,jpg.',
-            'banner.mimes' => 'Banner phai co duoi la jpeg,png,jpg.',
-            'poster.max' => 'Poster khong duoc vuot qua 2mb.',
-            'banner.max' => 'Banner khong duoc vuot qua 2mb.'
+            'required' => ':attribute là bắt buộc.',
+            'max' => ':attribute vuot qua kich thuoc.',
+            'numeric' => ':attribute phải là một số.',
+            'min' => ':attribute phải lớn hơn hoặc bằng 1.',
+            'date' => ':attribute phải là định dạng ngày hợp lệ.',
+            'file' => ':attribute phai la dang file.',
+            'mimes'=> ':attribute phai co duoi jpeg,png,jpg.',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'Ten phim',
+            'duration' => 'Thoi luong',
+            'releaseDate' => 'Ngay phat hanh',
+            'author' => 'Tac gia',
+            'actor' => 'Dien vien',
+            'trailer' => 'Trailer',
+            'summary' => 'Tom tat',
+            'language' => 'Ngon ngu',
+            'poster' => 'Poster',
+            'banner' => 'Banner'
         ];
     }
 }
